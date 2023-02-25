@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
@@ -149,5 +150,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .findFirst()
                 .orElse("error?");
         return Optional.ofNullable(opt);
+    }
+
+    @Override
+    public List<Employee> getByGender(Gender gender, String country) {
+        return employeeRepository.findByGender(gender, country);
     }
 }
