@@ -154,6 +154,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getByGender(Gender gender, String country) {
-        return employeeRepository.findByGender(gender, country);
+        /*System.err.println("service getByGender start: gender: " + gender + " country: " + country);*/
+        var employees = employeeRepository.findByGender(gender.toString(), country);
+        /*System.err.println("service getByGender end: " + employees.toString());*/
+        return employees;
     }
 }

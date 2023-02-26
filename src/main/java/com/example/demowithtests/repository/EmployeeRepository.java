@@ -1,7 +1,6 @@
 package com.example.demowithtests.repository;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Gender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,9 +23,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByCountryContaining(String country, Pageable pageable);
 
-    @Query(value = "select users.* from users, addresses " +
-            "where users.id = addresses.employee_id and gender =?1 and addresses.country =?2 " +
-            "ORDER BY users.name ASC", nativeQuery = true)
-    List<Employee> findByGender(Gender gender, String country);
+    @Query(value = "select * from users join addresses on users.id = addresses.employee_id " +
+            "where users.gender = :gender and addresses.country = :country", nativeQuery = true)
+    List<Employee> findByGender(String gender, String country);
 
 }
