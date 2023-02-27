@@ -54,4 +54,6 @@ public interface EmployeeService {
 
     List<Employee> getByGender(Gender gender, String country);
 
+    Page<Employee> getActiveAddressesByCountry(String country, Pageable pageable);
+
 }

@@ -159,4 +159,9 @@ public class EmployeeServiceBean implements EmployeeService {
         /*System.err.println("service getByGender end: " + employees.toString());*/
         return employees;
     }
+
+    @Override
+    public Page<Employee> getActiveAddressesByCountry(String country, Pageable pageable) {
+        return employeeRepository.findAllWhereIsActiveAddressByCountry(country, pageable);
+    }
 }

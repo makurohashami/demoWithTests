@@ -12,10 +12,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.glasnost.orika.Converter;
+import ma.glasnost.orika.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -141,5 +144,14 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> readByGender(@RequestParam Gender gender, @RequestParam String country) {
         return employeeService.getByGender(gender, country);
+    }
+
+    @GetMapping("/users/active")
+    @ResponseStatus(HttpStatus.OK)
+    //public Page<Employee> readActiveAddressesByCountry(@RequestParam String country,
+    public Page<Employee> readActiveAddressesByCountry(@RequestParam String country,
+                                                              @RequestParam Integer page) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "name"));
+        return employeeService.getActiveAddressesByCountry(country, pageable);
     }
 }
