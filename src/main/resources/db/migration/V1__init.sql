@@ -1,5 +1,5 @@
 create table public.users (
-                              id integer primary key not null default nextval('users_id_seq'::regclass),
+                              id serial primary key not null,
                               name character varying,
                               email character varying,
                               country character varying,
@@ -8,7 +8,7 @@ create table public.users (
 create unique index users_id_uindex on users using btree (id);
 
 create table public.addresses (
-                                  id bigint primary key not null default nextval('addresses_id_seq'::regclass),
+                                  id bigserial primary key not null,
                                   address_has_active boolean,
                                   city character varying(255),
                                   country character varying(255),

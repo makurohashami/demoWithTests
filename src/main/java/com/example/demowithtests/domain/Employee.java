@@ -16,7 +16,7 @@ import java.util.Set;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     private String name;
     private String country;

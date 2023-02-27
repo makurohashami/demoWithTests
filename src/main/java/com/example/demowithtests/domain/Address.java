@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(name = "address_has_active")
     private Boolean addressHasActive = Boolean.TRUE;
