@@ -154,4 +154,10 @@ public class Controller {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "name"));
         return employeeService.getActiveAddressesByCountry(country, pageable);
     }
+
+    @GetMapping("/users/nulls")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getWhereIsVisibleIsNull() {
+        return employeeService.selectWhereIsVisibleIsNull();
+    }
 }

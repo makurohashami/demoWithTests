@@ -47,13 +47,25 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee getById(Integer id) {
+        log.info("getById(Integer id) Service - start: id = {}", id);
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
+        changeStatus(employee);
+        if (!employee.getVisible()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+        }
+        log.info("getById(Integer id) Service - end:  = employee {}", employee);
         return employee;
+    }
+
+    private void changeStatus(Employee employee) {
+        log.info("changeStatus(Employee employee) Service - start: id = {}", employee.getId());
+        if (employee.getVisible() == null) {
+            employee.setVisible(Boolean.TRUE);
+            employeeRepository.save(employee);
+        }
+        log.info("changeStatus(Employee employee) Service - end: isVisible = {}", employee.getVisible());
     }
 
     @Override
@@ -63,6 +75,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
+                    /// TODO: 01.03.2023 isVisible do not update Jira - 5544
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -73,10 +86,10 @@ public class EmployeeServiceBean implements EmployeeService {
         //repository.deleteById(id);
         Employee employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        employeeRepository.delete(employee);
-        //repository.save(employee);
+                .orElseThrow(ResourceNotFoundException::new);
+        employee.setVisible(Boolean.FALSE);
+        //employeeRepository.delete(employee);
+        employeeRepository.save(employee);
     }
 
     @Override
@@ -164,4 +177,13 @@ public class EmployeeServiceBean implements EmployeeService {
     public Page<Employee> getActiveAddressesByCountry(String country, Pageable pageable) {
         return employeeRepository.findAllWhereIsActiveAddressByCountry(country, pageable);
     }
+
+    @Override
+    public List<Employee> selectWhereIsVisibleIsNull() {
+        var employees = employeeRepository.queryEmployeeByIsVisibleIsNull();
+        for (Employee employee : employees) employee.setVisible(Boolean.TRUE);
+        employeeRepository.saveAll(employees);
+        return employeeRepository.queryEmployeeByIsVisibleIsNull();
+    }
+
 }

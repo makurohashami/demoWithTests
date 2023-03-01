@@ -30,4 +30,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query("select e from Employee e join e.addresses a where a.addressHasActive = true and a.country = :country")
     Page<Employee> findAllWhereIsActiveAddressByCountry(String country, Pageable pageable);
 
+    List<Employee> queryEmployeeByIsVisibleIsNull();
+
 }

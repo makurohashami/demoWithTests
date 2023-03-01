@@ -28,6 +28,8 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private Boolean isVisible = Boolean.TRUE;
+
     public Integer getId() {
         return id;
     }
@@ -74,5 +76,13 @@ public class Employee {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Boolean getVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
     }
 }
