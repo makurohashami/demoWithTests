@@ -52,7 +52,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
         changeStatus(employee);
-        if (!employee.getVisible()) {
+        if (!employee.getIsVisible()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }
         log.info("getById(Integer id) Service - end:  = employee {}", employee);
@@ -61,11 +61,11 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private void changeStatus(Employee employee) {
         log.info("changeStatus(Employee employee) Service - start: id = {}", employee.getId());
-        if (employee.getVisible() == null) {
-            employee.setVisible(Boolean.TRUE);
+        if (employee.getIsVisible() == null) {
+            employee.setIsVisible(Boolean.TRUE);
             employeeRepository.save(employee);
         }
-        log.info("changeStatus(Employee employee) Service - end: isVisible = {}", employee.getVisible());
+        log.info("changeStatus(Employee employee) Service - end: isVisible = {}", employee.getIsVisible());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class EmployeeServiceBean implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-        employee.setVisible(Boolean.FALSE);
+        employee.setIsVisible(Boolean.FALSE);
         //employeeRepository.delete(employee);
         employeeRepository.save(employee);
     }
@@ -181,7 +181,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<Employee> selectWhereIsVisibleIsNull() {
         var employees = employeeRepository.queryEmployeeByIsVisibleIsNull();
-        for (Employee employee : employees) employee.setVisible(Boolean.TRUE);
+        for (Employee employee : employees) employee.setIsVisible(Boolean.TRUE);
         employeeRepository.saveAll(employees);
         return employeeRepository.queryEmployeeByIsVisibleIsNull();
     }
