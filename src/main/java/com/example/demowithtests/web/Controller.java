@@ -155,9 +155,15 @@ public class Controller {
         return employeeService.getActiveAddressesByCountry(country, pageable);
     }
 
-    @GetMapping("/users/nulls")
+    @GetMapping("/users/procVisible")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getWhereIsVisibleIsNull() {
         return employeeService.selectWhereIsVisibleIsNull();
+    }
+
+    @GetMapping("/users/procPrivate")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getEmployeeByIsPrivateIsNull() {
+        return employeeService.selectEmployeeByIsPrivateIsNull();
     }
 }

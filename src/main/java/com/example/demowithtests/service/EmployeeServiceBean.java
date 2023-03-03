@@ -218,4 +218,11 @@ public class EmployeeServiceBean implements EmployeeService {
         return employeeRepository.queryEmployeeByIsVisibleIsNull();
     }
 
+    @Override
+    public List<Employee> selectEmployeeByIsPrivateIsNull() {
+        var employees = employeeRepository.queryEmployeeByIsPrivateIsNull();
+        employees.forEach(employee -> employee.setIsPrivate(Boolean.FALSE));
+        employeeRepository.saveAll(employees);
+        return employeeRepository.queryEmployeeByIsPrivateIsNull();
+    }
 }
