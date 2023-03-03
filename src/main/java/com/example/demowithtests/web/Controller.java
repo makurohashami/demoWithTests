@@ -148,10 +148,10 @@ public class Controller {
 
     @GetMapping("/users/active")
     @ResponseStatus(HttpStatus.OK)
-    //public Page<Employee> readActiveAddressesByCountry(@RequestParam String country,
     public Page<Employee> readActiveAddressesByCountry(@RequestParam String country,
-                                                              @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "name"));
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         return employeeService.getActiveAddressesByCountry(country, pageable);
     }
 
