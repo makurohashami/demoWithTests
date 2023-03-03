@@ -3,8 +3,9 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.exception.ResourceIsPrivateException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
-import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import com.example.demowithtests.util.exception.ResourceNotVisibleException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,13 +35,34 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        log.info("getAll() Service - start:");
+        var employees = employeeRepository.findAll();
+        employees.stream().forEach(employee -> {
+            if (employee.getIsPrivate() == Boolean.TRUE || employee.getIsPrivate() == null)
+                setEmployeePrivateFields(employee);
+        });
+        log.info("setEmployeePrivateFields() Service - end:  = size {}", employees.size());
+        return employees;
+    }
+
+    private void setEmployeePrivateFields(Employee employee) {
+        log.debug("setEmployeePrivateFields() Service - start: id = {}", employee.getId());
+        employee.setName("is hidden");
+        employee.setEmail("is hidden");
+        employee.setCountry("is hidden");
+        employee.setAddresses(null);
+        employee.setGender(null);
+        log.debug("setEmployeePrivateFields() Service - end:  = employee {}", employee);
     }
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> list = employeeRepository.findAll(pageable);
+        list.stream().forEach(employee -> {
+            if (employee.getIsPrivate() == Boolean.TRUE || employee.getIsPrivate() == null)
+                setEmployeePrivateFields(employee);
+        });
         log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
@@ -51,21 +73,30 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-        changeStatus(employee);
-        if (!employee.getIsVisible()) {
-            throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }
+        changeVisibleStatus(employee);
+        changePrivateStatus(employee);
+        if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
+        if (employee.getIsPrivate()) throw new ResourceIsPrivateException();
         log.info("getById(Integer id) Service - end:  = employee {}", employee);
         return employee;
     }
 
-    private void changeStatus(Employee employee) {
-        log.info("changeStatus(Employee employee) Service - start: id = {}", employee.getId());
+    private void changePrivateStatus(Employee employee) {
+        log.info("changePrivateStatus() Service - start: id = {}", employee.getId());
+        if (employee.getIsPrivate() == null) {
+            employee.setIsPrivate(Boolean.TRUE);
+            employeeRepository.save(employee);
+        }
+        log.info("changePrivateStatus() Service - end: IsPrivate = {}", employee.getIsPrivate());
+    }
+
+    private void changeVisibleStatus(Employee employee) {
+        log.info("changeVisibleStatus() Service - start: id = {}", employee.getId());
         if (employee.getIsVisible() == null) {
             employee.setIsVisible(Boolean.TRUE);
             employeeRepository.save(employee);
         }
-        log.info("changeStatus(Employee employee) Service - end: isVisible = {}", employee.getIsVisible());
+        log.info("changeVisibleStatus() Service - end: isVisible = {}", employee.getIsVisible());
     }
 
     @Override
@@ -75,6 +106,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
+                    entity.setIsPrivate(employee.getIsPrivate());
                     /// TODO: 01.03.2023 isVisible do not update Jira - 5544
                     return employeeRepository.save(entity);
                 })

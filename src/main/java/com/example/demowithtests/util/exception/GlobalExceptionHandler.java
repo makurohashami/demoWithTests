@@ -34,6 +34,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(ResourceNotVisibleException.class)
+    public ResponseEntity<?> resourceNotVisibleException(WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "Resource not visible",
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceIsPrivateException.class)
+    public ResponseEntity<?> resourceIsPrivateException(WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "Resource is private",
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
+
     @Data
     @AllArgsConstructor
     private static class MyGlobalExceptionHandler {
