@@ -60,4 +60,9 @@ public interface EmployeeService {
     List<Employee> selectWhereIsVisibleIsNull();
 
     List<Employee> selectEmployeeByIsPrivateIsNull();
+
+    void addOneThousandEmployees();
+
+    void updateOneKEmployee(Employee employee);
+
 }

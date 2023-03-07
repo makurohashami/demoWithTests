@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Employee {
 
     @Id
@@ -24,6 +25,7 @@ public class Employee {
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
+    @ToString.Exclude
     private Set<Address> addresses = new HashSet<>();
     @Enumerated(EnumType.STRING)
     private Gender gender;

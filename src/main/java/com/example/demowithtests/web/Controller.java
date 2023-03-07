@@ -12,13 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.Converter;
-import ma.glasnost.orika.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -166,4 +163,23 @@ public class Controller {
     public List<Employee> getEmployeeByIsPrivateIsNull() {
         return employeeService.selectEmployeeByIsPrivateIsNull();
     }
+
+    @GetMapping("/users/oneKEmployees")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createOneThousandEmployees() {
+        employeeService.addOneThousandEmployees();
+    }
+
+    @PatchMapping("/users/patchUpdate")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateEmployeePatch(@RequestBody Employee employee) {
+        employeeService.updateOneKEmployee(employee);
+    }
+
+    @PutMapping("/users/putUpdate")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateEmployeePut(@RequestBody Employee employee) {
+        employeeService.updateOneKEmployee(employee);
+    }
+
 }

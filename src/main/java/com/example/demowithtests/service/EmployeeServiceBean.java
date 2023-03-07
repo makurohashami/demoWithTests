@@ -103,10 +103,14 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee updateById(Integer id, Employee employee) {
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    entity.setIsPrivate(employee.getIsPrivate());
+                    entity.setName(employee.getName() == null || employee.getName().equals(entity.getName())
+                            ? entity.getName() : employee.getName());
+                    entity.setEmail(employee.getEmail() == null || employee.getEmail().equals(entity.getEmail())
+                            ? entity.getEmail() : employee.getEmail());
+                    entity.setCountry(employee.getCountry() == null || employee.getCountry().equals(entity.getCountry())
+                            ? entity.getCountry() : employee.getCountry());
+                    entity.setIsPrivate(employee.getIsPrivate() == null || employee.getIsPrivate().equals(entity.getIsPrivate())
+                            ? entity.getIsPrivate() : employee.getIsPrivate());
                     /// TODO: 01.03.2023 isVisible do not update Jira - 5544
                     return employeeRepository.save(entity);
                 })
@@ -225,4 +229,35 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.saveAll(employees);
         return employeeRepository.queryEmployeeByIsPrivateIsNull();
     }
+
+    @Override
+    public void addOneThousandEmployees() {
+        log.info("addOneThousandEmployees() Service - start");
+        List<Employee> employees = new ArrayList<>();
+        for (int i = 0; i < 1000; ++i) {
+            employees.add(Employee.builder()
+                    .name("Yan")
+                    .email("yan@gmail.com")
+                    .country("Poland")
+                    .gender(Gender.M)
+                    .isPrivate(Boolean.FALSE)
+                    .isVisible(Boolean.TRUE)
+                    .build());
+        }
+        //employeeRepository.saveAll(employees);
+        log.info("addOneThousandEmployees() Service - end: list size - {}", employees.size());
+    }
+
+    @Override
+    public void updateOneKEmployee(Employee employee) {
+        log.info("updateOneKEmployee() Service - start: employee - {} ", employee);
+        Long methodStart = System.currentTimeMillis();
+        Integer maxId = employeeRepository.findMaxEmployeeId();
+        for (int i = maxId - 999; i <= maxId; ++i) {
+            updateById(i, employee);
+        }
+        Long methodEnd = System.currentTimeMillis();
+        log.info("updateOneKEmployee() Service - emd: time in ms - {} ", methodEnd - methodStart);
+    }
+
 }

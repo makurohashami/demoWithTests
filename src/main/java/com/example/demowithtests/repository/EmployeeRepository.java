@@ -34,4 +34,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     List<Employee> queryEmployeeByIsPrivateIsNull();
 
+    @Query(value = "select max(id) from users", nativeQuery = true)
+    Integer findMaxEmployeeId();
+
 }
