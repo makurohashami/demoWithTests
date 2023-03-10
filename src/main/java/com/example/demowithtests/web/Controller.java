@@ -164,7 +164,7 @@ public class Controller {
         return employeeService.selectEmployeeByIsPrivateIsNull();
     }
 
-    @GetMapping("/users/oneKEmployees")
+    @PostMapping("/users/oneKEmployees")
     @ResponseStatus(HttpStatus.CREATED)
     public void createOneThousandEmployees() {
         employeeService.addOneThousandEmployees();

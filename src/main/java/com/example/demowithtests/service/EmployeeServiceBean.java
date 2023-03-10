@@ -14,11 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -101,20 +97,22 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee updateById(Integer id, Employee employee) {
+        log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    entity.setName(employee.getName() == null || employee.getName().equals(entity.getName())
-                            ? entity.getName() : employee.getName());
-                    entity.setEmail(employee.getEmail() == null || employee.getEmail().equals(entity.getEmail())
-                            ? entity.getEmail() : employee.getEmail());
-                    entity.setCountry(employee.getCountry() == null || employee.getCountry().equals(entity.getCountry())
-                            ? entity.getCountry() : employee.getCountry());
-                    entity.setIsPrivate(employee.getIsPrivate() == null || employee.getIsPrivate().equals(entity.getIsPrivate())
-                            ? entity.getIsPrivate() : employee.getIsPrivate());
-                    /// TODO: 01.03.2023 isVisible do not update Jira - 5544
+                    if (employee.getName() != null && !employee.getName().equals(entity.getName()))
+                        entity.setName(employee.getName());
+                    if (employee.getEmail() != null && !employee.getEmail().equals(entity.getEmail()))
+                        entity.setEmail(employee.getEmail());
+                    if (employee.getCountry() != null && !employee.getCountry().equals(entity.getCountry()))
+                        entity.setCountry(employee.getCountry());
+                    if (employee.getIsPrivate() != null && !employee.getIsPrivate().equals(entity.getIsPrivate()))
+                        entity.setIsPrivate(employee.getIsPrivate());
+                    log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
+                    // TODO: 01.03.2023 isVisible do not update Jira - 5544
                     return employeeRepository.save(entity);
                 })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -203,9 +201,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getByGender(Gender gender, String country) {
-        /*System.err.println("service getByGender start: gender: " + gender + " country: " + country);*/
         var employees = employeeRepository.findByGender(gender.toString(), country);
-        /*System.err.println("service getByGender end: " + employees.toString());*/
         return employees;
     }
 
@@ -233,18 +229,16 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void addOneThousandEmployees() {
         log.info("addOneThousandEmployees() Service - start");
-        List<Employee> employees = new ArrayList<>();
-        for (int i = 0; i < 1000; ++i) {
-            employees.add(Employee.builder()
-                    .name("Yan")
-                    .email("yan@gmail.com")
-                    .country("Poland")
-                    .gender(Gender.M)
-                    .isPrivate(Boolean.FALSE)
-                    .isVisible(Boolean.TRUE)
-                    .build());
-        }
-        //employeeRepository.saveAll(employees);
+        List<Employee> employees = Collections.nCopies(1000, Employee.builder()
+                .name("Yan")
+                .email("yan@gmail.com")
+                .country("Poland")
+                .gender(Gender.M)
+                .isPrivate(Boolean.FALSE)
+                .isVisible(Boolean.TRUE)
+                .build()
+        );
+        employeeRepository.saveAll(employees);
         log.info("addOneThousandEmployees() Service - end: list size - {}", employees.size());
     }
 
@@ -256,8 +250,8 @@ public class EmployeeServiceBean implements EmployeeService {
         for (int i = maxId - 999; i <= maxId; ++i) {
             updateById(i, employee);
         }
-        Long methodEnd = System.currentTimeMillis();
-        log.info("updateOneKEmployee() Service - emd: time in ms - {} ", methodEnd - methodStart);
+        Long diff = System.currentTimeMillis() - methodStart;
+        log.info("updateOneKEmployee() Service - emd: time in ms - {} ", diff);
     }
 
 }
