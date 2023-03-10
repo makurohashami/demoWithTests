@@ -3,9 +3,10 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +33,6 @@ import java.util.Optional;
 public class Controller {
 
     private final EmployeeService employeeService;
-    private final EmployeeConverter converter;
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
@@ -44,9 +44,8 @@ public class Controller {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
-
-        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var dto = converter.toDto(employeeService.create(employee));
+        var employee = EmployeeMapper.INSTANCE.fromDto(requestForSave);
+        var dto = EmployeeMapper.INSTANCE.toDto(employeeService.create(employee));
 
         return dto;
     }
@@ -54,8 +53,8 @@ public class Controller {
     //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getAllUsers() {
-        return employeeService.getAll();
+    public List<EmployeeReadDto> getAllUsers() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getAll());
     }
 
     @GetMapping("/users/p")
@@ -80,7 +79,7 @@ public class Controller {
         log.debug("getEmployeeById() Controller - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() Controller - to dto start: id = {}", id);
-        var dto = converter.toReadDto(employee);
+        var dto = EmployeeMapper.INSTANCE.toReadDto(employee);
         log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
         return dto;
     }
@@ -88,9 +87,9 @@ public class Controller {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
-
-        return employeeService.updateById(id, employee);
+    public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeDto dto) {
+        var employee = employeeService.updateById(id, EmployeeMapper.INSTANCE.fromDto(dto));
+        return EmployeeMapper.INSTANCE.toDto(employee);
     }
 
     //Удаление по id
@@ -139,8 +138,9 @@ public class Controller {
 
     @GetMapping("/users/byGenderAndCountry")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> readByGender(@RequestParam Gender gender, @RequestParam String country) {
-        return employeeService.getByGender(gender, country);
+    public List<EmployeeReadDto> readByGender(@RequestParam Gender gender, @RequestParam String country) {
+        var employees = employeeService.getByGender(gender, country);
+        return EmployeeMapper.INSTANCE.toListReadDto(employees);
     }
 
     @GetMapping("/users/active")
@@ -150,18 +150,25 @@ public class Controller {
                                                        @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         return employeeService.getActiveAddressesByCountry(country, pageable);
+        /*var dto = EmployeeMapper.INSTANCE
+                .toPageReadDto(employeeService.getActiveAddressesByCountry(country, pageable));
+        return dto;*/
     }
 
     @GetMapping("/users/procVisible")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getWhereIsVisibleIsNull() {
-        return employeeService.selectWhereIsVisibleIsNull();
+    public List<EmployeeIsVisibleDto> getWhereIsVisibleIsNull() {
+        var employees = employeeService.selectWhereIsVisibleIsNull();
+        var dto = EmployeeMapper.INSTANCE.toListIsVisibleDto(employees);
+        return dto;
     }
 
     @GetMapping("/users/procPrivate")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getEmployeeByIsPrivateIsNull() {
-        return employeeService.selectEmployeeByIsPrivateIsNull();
+    public List<EmployeeIsVisibleDto> getEmployeeByIsPrivateIsNull() {
+        var employees = employeeService.selectEmployeeByIsPrivateIsNull();
+        var dto = EmployeeMapper.INSTANCE.toListIsVisibleDto(employees);
+        return dto;
     }
 
     @PostMapping("/users/oneKEmployees")
@@ -172,13 +179,15 @@ public class Controller {
 
     @PatchMapping("/users/patchUpdate")
     @ResponseStatus(HttpStatus.OK)
-    public void updateEmployeePatch(@RequestBody Employee employee) {
+    public void updateEmployeePatch(@RequestBody @Valid EmployeeDto dto) {
+        var employee = EmployeeMapper.INSTANCE.fromDto(dto);
         employeeService.updateOneKEmployee(employee);
     }
 
     @PutMapping("/users/putUpdate")
     @ResponseStatus(HttpStatus.OK)
-    public void updateEmployeePut(@RequestBody Employee employee) {
+    public void updateEmployeePut(@RequestBody @Valid EmployeeDto dto) {
+        var employee = EmployeeMapper.INSTANCE.fromDto(dto);
         employeeService.updateOneKEmployee(employee);
     }
 

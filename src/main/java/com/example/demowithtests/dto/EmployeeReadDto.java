@@ -31,5 +31,4 @@ public class EmployeeReadDto {
 
     public Gender gender;
 
-    public Boolean isVisible;
 }
