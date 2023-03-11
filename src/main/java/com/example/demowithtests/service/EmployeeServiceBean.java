@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,6 +97,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Employee updateById(Integer id, Employee employee) {
         log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
