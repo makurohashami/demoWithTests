@@ -5,6 +5,7 @@ import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,8 +88,8 @@ public class Controller {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeDto dto) {
-        var employee = employeeService.updateById(id, EmployeeMapper.INSTANCE.fromDto(dto));
+    public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDto dto) {
+        var employee = employeeService.updateById(id, EmployeeMapper.INSTANCE.fromUpdateDto(dto));
         return EmployeeMapper.INSTANCE.toDto(employee);
     }
 

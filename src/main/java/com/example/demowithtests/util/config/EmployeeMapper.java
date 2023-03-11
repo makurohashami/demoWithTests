@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -23,6 +24,8 @@ public interface EmployeeMapper {
     List<EmployeeIsVisibleDto> toListIsVisibleDto(List<Employee> employees);
 
     List<EmployeeReadDto> toListReadDto(List<Employee> employees);
+
+    Employee fromUpdateDto(EmployeeUpdateDto dto);
 
     //Page<EmployeeReadDto> toPageReadDto(Page<Employee> employeePage);
 }
