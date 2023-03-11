@@ -27,5 +27,4 @@ public interface EmployeeMapper {
 
     Employee fromUpdateDto(EmployeeUpdateDto dto);
 
-    //Page<EmployeeReadDto> toPageReadDto(Page<Employee> employeePage);
 }
