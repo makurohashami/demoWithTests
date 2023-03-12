@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Validation failed: " + ex.getBindingResult().getFieldError().getField() + " " + ex.getBindingResult().getFieldError().getDefaultMessage(),
+                "Validation failed. Field: " + ex.getBindingResult().getFieldError().getField() + " Message: " + ex.getBindingResult().getFieldError().getDefaultMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
