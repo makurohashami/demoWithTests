@@ -1,5 +1,6 @@
 package com.example.demowithtests.domain;
 
+import com.example.demowithtests.util.annotations.ToLowerCase;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Employee {
     private Integer id;
     private String name;
     private String country;
+    @ToLowerCase
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
