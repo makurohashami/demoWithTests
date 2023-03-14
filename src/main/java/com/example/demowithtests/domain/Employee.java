@@ -1,5 +1,6 @@
 package com.example.demowithtests.domain;
 
+import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+    @Name
     private String name;
     private String country;
     @ToLowerCase
