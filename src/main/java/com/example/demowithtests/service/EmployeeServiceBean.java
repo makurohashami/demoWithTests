@@ -3,6 +3,7 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.annotations.ActivateToLowerCase;
 import com.example.demowithtests.util.exception.ResourceIsPrivateException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotVisibleException;
@@ -26,6 +27,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     @Override
+    @ActivateToLowerCase
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -98,6 +100,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     @Transactional
+    @ActivateToLowerCase
     public Employee updateById(Integer id, Employee employee) {
         log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
