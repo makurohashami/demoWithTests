@@ -18,7 +18,7 @@ public class CustomEntityValidationAspect {
     }
 
     @Before("callAtAnnotationActivator()")
-    public void makeToLowerCase(JoinPoint joinPoint) throws Throwable {
+    public void makeValid(JoinPoint joinPoint) throws Throwable {
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof Employee) {
                 for (Field field : arg.getClass().getDeclaredFields()) {
@@ -29,16 +29,6 @@ public class CustomEntityValidationAspect {
                             field.set(arg, ((String) value).toLowerCase());
                         }
                     }
-                }
-            }
-        }
-    }
-
-    @Before("callAtAnnotationActivator()")
-    public void makeFormattedName(JoinPoint joinPoint) throws Throwable {
-        for (Object arg : joinPoint.getArgs()) {
-            if (arg instanceof Employee) {
-                for (Field field : arg.getClass().getDeclaredFields()) {
                     if (field.isAnnotationPresent(Name.class)) {
                         field.setAccessible(true);
                         Object value = field.get(arg);
