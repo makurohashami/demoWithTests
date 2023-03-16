@@ -18,8 +18,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Slf4j
@@ -115,6 +117,8 @@ public class EmployeeServiceBean implements EmployeeService {
                         entity.setCountry(employee.getCountry());
                     if (employee.getIsPrivate() != null && !employee.getIsPrivate().equals(entity.getIsPrivate()))
                         entity.setIsPrivate(employee.getIsPrivate());
+                    if (employee.getPhotos() != null && !employee.getPhotos().equals(entity.getPhotos()))
+                        entity.setPhotos(employee.getPhotos());
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
                     // TODO: 01.03.2023 isVisible do not update Jira - 5544
                     return employeeRepository.save(entity);
@@ -261,4 +265,20 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateOneKEmployee() Service - emd: time in ms - {} ", diff);
     }
 
+    //Дістає всіх користувачів в яких є фото яким 5 років без 7-ми днів, чи більше.
+    @Override
+    public List<Employee> findExpiredPhotos() {
+        var expired = employeeRepository.findAll()
+                .stream()
+                .filter(employee -> employee.getPhotos()
+                        .stream()
+                        .flatMap(photo -> Stream.of(
+                                photo.getAddDate()
+                                        .plusYears(5)
+                                        .minusDays(7)
+                                        .isBefore(LocalDateTime.now())))
+                        .anyMatch(Boolean.TRUE::equals))
+                .collect(Collectors.toList());
+        return expired;
+    }
 }

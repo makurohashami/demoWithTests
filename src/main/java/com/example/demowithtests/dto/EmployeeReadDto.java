@@ -31,4 +31,6 @@ public class EmployeeReadDto {
 
     public Gender gender;
 
+    public Set<PhotoDto> photos;
+
 }

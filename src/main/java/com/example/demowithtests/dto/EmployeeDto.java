@@ -33,4 +33,6 @@ public class EmployeeDto {
     public Set<AddressDto> addresses = new HashSet<>();
 
     public Gender gender;
+
+    public Set<PhotoDto> photos;
 }

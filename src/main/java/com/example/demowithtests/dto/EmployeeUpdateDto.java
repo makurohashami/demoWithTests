@@ -1,12 +1,14 @@
 package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.Photo;
 import com.example.demowithtests.util.annotations.BlockedEmailDomains;
 import com.example.demowithtests.util.annotations.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class EmployeeUpdateDto {
 
@@ -26,5 +28,7 @@ public class EmployeeUpdateDto {
     public Boolean isPrivate;
 
     public Gender gender;
+
+    public Set<PhotoDto> photos;
 
 }

@@ -110,10 +110,10 @@ public class Controller {
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "3") int size,
-                                        @RequestParam(defaultValue = "") List<String> sortList,
-                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "3") int size,
+                                               @RequestParam(defaultValue = "") List<String> sortList,
+                                               @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
         //Pageable paging = PageRequest.of(page, size);
         //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
         return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString())
@@ -148,8 +148,8 @@ public class Controller {
     @GetMapping("/users/active")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> readActiveAddressesByCountry(@RequestParam String country,
-                                                       @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "5") int size) {
+                                                              @RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         return employeeService.getActiveAddressesByCountry(country, pageable)
                 .map(EmployeeMapper.INSTANCE::toReadDto);
@@ -189,6 +189,12 @@ public class Controller {
     public void updateEmployeePut(@RequestBody @Valid EmployeeDto dto) {
         var employee = EmployeeMapper.INSTANCE.fromDto(dto);
         employeeService.updateOneKEmployee(employee);
+    }
+
+    @GetMapping("/users/expiredPhotos")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeReadDto> getExpiredPhotos() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findExpiredPhotos());
     }
 
 }

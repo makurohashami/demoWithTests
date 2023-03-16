@@ -65,4 +65,6 @@ public interface EmployeeService {
 
     void updateOneKEmployee(Employee employee);
 
+    List<Employee> findExpiredPhotos();
+
 }
