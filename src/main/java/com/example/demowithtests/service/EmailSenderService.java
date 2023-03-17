@@ -6,16 +6,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
 @Log4j2
+@AllArgsConstructor
+@Service
 public class EmailSenderService {
 
     private final JavaMailSender mailSender;
 
     public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("profiler@demoapp.com");
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
@@ -24,3 +23,4 @@ public class EmailSenderService {
         log.info("Mail to {} sent successfully", toEmail);
     }
 }
+
