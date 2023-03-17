@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.SendFailedException;
 import java.util.Date;
 
 @ControllerAdvice
@@ -58,6 +60,24 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
                 "Validation failed. Field: " + ex.getBindingResult().getFieldError().getField() + " Message: " + ex.getBindingResult().getFieldError().getDefaultMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SendFailedException.class)
+    public ResponseEntity<?> methodArgumentNotValidException(SendFailedException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "Mail sending failed. " + ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<?> methodAuthenticationFailedException(AuthenticationFailedException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "Mail authentication failed. " + ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

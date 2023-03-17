@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Getter
 @Setter
+@ToString
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

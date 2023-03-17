@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmailSenderService emailSenderService;
 
     @Override
     @ActivateCustomValidationAnnotations({ToLowerCase.class, Name.class})
@@ -268,7 +269,7 @@ public class EmployeeServiceBean implements EmployeeService {
     //Дістає всіх користувачів в яких є фото яким 5 років без 7-ми днів, чи більше.
     @Override
     public List<Employee> findExpiredPhotos() {
-        var expired = employeeRepository.findAll()
+        return employeeRepository.findAll()
                 .stream()
                 .filter(employee -> employee.getPhotos()
                         .stream()
@@ -279,6 +280,31 @@ public class EmployeeServiceBean implements EmployeeService {
                                         .isBefore(LocalDateTime.now())))
                         .anyMatch(Boolean.TRUE::equals))
                 .collect(Collectors.toList());
-        return expired;
+    }
+
+    //Відсилає повідомлення на пошти користувачів з проханням оновити фото.
+    @Override
+    public Set<String> sendEmailsWhereExpiredPhotos() {
+        var expired = findExpiredPhotos();
+        var emails = new HashSet<String>();
+        if (expired.size() > 0) {
+            expired.forEach(employee -> {
+                emailSenderService.sendEmail(
+                        /*employee.getEmail(),*/ //підставляються адреси користувачів
+                        "yaroslv.kotyk@gmail.com", //підставив свою для тесту
+                        "Need to update the photo",
+                        String.format(
+                                "Dear " + employee.getName() + "!\n" +
+                                        "\n" +
+                                        "The expiration date of your photo is coming up soon. \n" +
+                                        "Please. Don't delay in updating it. \n" +
+                                        "\n" +
+                                        "Best regards,\n" +
+                                        "DemoApp Profile Service.")
+                );
+                emails.add(employee.getEmail());
+            });
+        }
+        return emails;
     }
 }

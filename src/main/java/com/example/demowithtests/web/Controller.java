@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -195,6 +196,12 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getExpiredPhotos() {
         return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findExpiredPhotos());
+    }
+
+    @PatchMapping("/users/sendEmailsByExpiredPhotos")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<String> sendEmailsByExpiredPhotos() {
+        return employeeService.sendEmailsWhereExpiredPhotos();
     }
 
 }

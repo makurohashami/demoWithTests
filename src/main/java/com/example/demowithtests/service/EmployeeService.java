@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface EmployeeService {
 
@@ -66,5 +67,7 @@ public interface EmployeeService {
     void updateOneKEmployee(Employee employee);
 
     List<Employee> findExpiredPhotos();
+
+    Set<String> sendEmailsWhereExpiredPhotos();
 
 }
