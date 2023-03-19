@@ -37,7 +37,7 @@ public class EmployeeDto {
 
     public Gender gender;
 
-    public Set<PhotoDto> photos;
+    public Set<PhotoDto> photos = new HashSet<>();
 
     @JsonIgnore
     public Boolean isVisible = Boolean.TRUE;

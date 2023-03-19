@@ -5,10 +5,6 @@ import com.example.demowithtests.dto.address.AddressDto;
 import com.example.demowithtests.dto.photo.PhotoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 public class EmployeeReadDto {
@@ -20,7 +16,7 @@ public class EmployeeReadDto {
 
     public String email;
 
-    public Set<AddressDto> addresses = new HashSet<>();
+    public Set<AddressDto> addresses;
 
     public Set<PhotoDto> photos;
 
