@@ -1,5 +1,6 @@
 package com.example.demowithtests.service;
 
+import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
@@ -40,6 +41,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<Employee> getAll() {
         log.info("getAll() Service - start:");
         var employees = employeeRepository.findAll();
+        employees.forEach(this::setOnlyActiveAddresses);
         log.info("setEmployeePrivateFields() Service - end:  = size {}", employees.size());
         return employees;
     }
@@ -47,9 +49,13 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
-        Page<Employee> list = employeeRepository.findAll(pageable);
-        log.debug("getAllWithPagination() - end: list = {}", list);
-        return list;
+        Page<Employee> page = employeeRepository.findAll(pageable);
+        page.map(employee -> {
+            setOnlyActiveAddresses(employee);
+            return employee;
+        });
+        log.debug("getAllWithPagination() - end: page = {}", page);
+        return page;
     }
 
     @Override
@@ -58,6 +64,7 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         changeVisibleStatus(employee);
+        setOnlyActiveAddresses(employee);
         if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
         log.info("getById(Integer id) Service - end:  = employee {}", employee);
         return employee;
@@ -99,6 +106,7 @@ public class EmployeeServiceBean implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         employee.setIsVisible(Boolean.FALSE);
+        employee.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
         employeeRepository.save(employee);
     }
 
@@ -107,8 +115,8 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.deleteAll();
     }
 
-    //-- Методи Олега --\\
 
+    //-- Методи Олега --\\
     @Override
     public Page<Employee> findByCountryContaining(String country, int page, int size, List<String> sortList, String sortOrder) {
         // create Pageable object using the page, size and sort details
@@ -167,8 +175,8 @@ public class EmployeeServiceBean implements EmployeeService {
         return Optional.ofNullable(opt);
     }
 
-    //-- Мої методи --\\
 
+    //-- Мої методи --\\
     @Override
     public List<Employee> getByGender(Gender gender, String country) {
         var employees = employeeRepository.findByGender(gender.toString(), country);
@@ -183,7 +191,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<Employee> selectWhereIsVisibleIsNull() {
         var employees = employeeRepository.queryEmployeeByIsVisibleIsNull();
-        for (Employee employee : employees) employee.setIsVisible(Boolean.TRUE);
+        employees.forEach(employee -> employee.setIsVisible(Boolean.TRUE));
         employeeRepository.saveAll(employees);
         return employeeRepository.queryEmployeeByIsVisibleIsNull();
     }
@@ -256,4 +264,14 @@ public class EmployeeServiceBean implements EmployeeService {
         }
         return emails;
     }
+
+    //-- Technical Methods --\\
+
+    private void setOnlyActiveAddresses(Employee employee) {
+        employee.setAddresses(employee.getAddresses()
+                .stream()
+                .filter(Address::getAddressHasActive)
+                .collect(Collectors.toSet()));
+    }
+
 }
