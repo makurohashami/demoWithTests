@@ -2,6 +2,7 @@ package com.example.demowithtests.util.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,11 +51,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(SendFailedException.class)
-    public ResponseEntity<?> methodArgumentNotValidException(SendFailedException ex, WebRequest request) {
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<?> methodArgumentNotValidException(MailException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Mail sending failed. " + ex.getMessage(),
+                "Mail failed. " + ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
