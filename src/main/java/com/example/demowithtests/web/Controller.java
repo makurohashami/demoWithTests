@@ -2,10 +2,10 @@ package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeIsVisibleDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
-import com.example.demowithtests.dto.EmployeeUpdateDto;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,7 +1,4 @@
-package com.example.demowithtests.dto;
-
-import java.time.Instant;
-import java.util.Date;
+package com.example.demowithtests.dto.address;
 
 public class AddressDto {
 
@@ -10,6 +7,4 @@ public class AddressDto {
     public String country;
     public String city;
     public String street;
-    //todo: dfhgjkdfhg Jira - 5544
-    public Date date = Date.from(Instant.now());
 }

@@ -1,10 +1,10 @@
 package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeIsVisibleDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
-import com.example.demowithtests.dto.EmployeeUpdateDto;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
