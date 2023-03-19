@@ -16,14 +16,14 @@ import java.util.List;
 @Component
 public class CustomEntityValidationAspect {
 
-    @Pointcut("@annotation(ActivateCustomValidationAnnotations) && within(com.example.demowithtests.service.*)")
+    @Pointcut("@annotation(com.example.demowithtests.util.annotations.ActivateCustomAnnotations) && within(com.example.demowithtests.service.*)")
     public void callAtAnnotationActivator() {
     }
 
     @Before("callAtAnnotationActivator()")
     public void makeValid(JoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        ActivateCustomValidationAnnotations annotation = signature.getMethod().getAnnotation(ActivateCustomValidationAnnotations.class);
+        ActivateCustomAnnotations annotation = signature.getMethod().getAnnotation(ActivateCustomAnnotations.class);
         List annotations = Arrays.asList(annotation.value());
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof Employee) {

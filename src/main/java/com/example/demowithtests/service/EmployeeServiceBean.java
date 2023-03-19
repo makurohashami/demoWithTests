@@ -3,7 +3,7 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.util.annotations.ActivateCustomValidationAnnotations;
+import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -31,7 +31,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmailSenderService emailSenderService;
 
     @Override
-    @ActivateCustomValidationAnnotations({ToLowerCase.class, Name.class})
+    @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -74,7 +74,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     @Transactional
-    @ActivateCustomValidationAnnotations({ToLowerCase.class, Name.class})
+    @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
     public Employee updateById(Integer id, Employee employee) {
         log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
