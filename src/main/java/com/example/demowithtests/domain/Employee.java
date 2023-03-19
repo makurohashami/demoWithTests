@@ -29,13 +29,13 @@ public class Employee {
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
-    @ToString.Exclude
-    @OrderBy("country asc, id desc")
+    @OrderBy("country asc, id asc")
     private Set<Address> addresses = new HashSet<>();
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean isVisible = Boolean.TRUE;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
+    @OrderBy("addDate asc, id asc")
     private Set<Photo> photos = new HashSet<>();
 }

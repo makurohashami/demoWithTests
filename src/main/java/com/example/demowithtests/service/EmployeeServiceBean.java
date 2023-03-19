@@ -92,11 +92,25 @@ public class EmployeeServiceBean implements EmployeeService {
                         entity.setEmail(employee.getEmail());
                     if (employee.getCountry() != null && !employee.getCountry().equals(entity.getCountry()))
                         entity.setCountry(employee.getCountry());
-                    if (employee.getPhotos() != null && !employee.getPhotos().equals(entity.getPhotos()))
-                        entity.setPhotos(employee.getPhotos());
+                    if (employee.getGender() != null && !employee.getGender().equals(entity.getGender()))
+                        entity.setGender(employee.getGender());
+                    if (employee.getPhotos() != null && !employee.getPhotos().equals(entity.getPhotos())) {
+                        entity.getPhotos().forEach(photo -> photo.setIsExpired(Boolean.TRUE));
+                        entity.setPhotos(Stream
+                                .concat(entity.getPhotos().stream(),
+                                        employee.getPhotos().stream())
+                                .collect(Collectors.toSet()));
+                    }
+                    if (employee.getAddresses() != null && !employee.getAddresses().equals(entity.getAddresses())) {
+                        entity.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
+                        entity.setAddresses(Stream
+                                .concat(entity.getAddresses().stream(),
+                                        employee.getAddresses().stream())
+                                .collect(Collectors.toSet()));
+                    }
+                    employeeRepository.save(entity);
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
-                    // TODO: 01.03.2023 isVisible do not update Jira - 5544
-                    return employeeRepository.save(entity);
+                    return getById(id);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
     }
