@@ -25,8 +25,6 @@ public class EmployeeUpdateDto {
     @CountryRightFormed
     public String country;
 
-    public Boolean isPrivate;
-
     public Gender gender;
 
     public Set<PhotoDto> photos;

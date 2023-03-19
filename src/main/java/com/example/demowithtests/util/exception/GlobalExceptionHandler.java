@@ -46,15 +46,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ResourceIsPrivateException.class)
-    public ResponseEntity<?> resourceIsPrivateException(WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                "Resource is private",
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(

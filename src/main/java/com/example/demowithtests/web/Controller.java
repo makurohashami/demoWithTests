@@ -115,11 +115,11 @@ public class Controller {
                                                @RequestParam(defaultValue = "3") int size,
                                                @RequestParam(defaultValue = "") List<String> sortList,
                                                @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
-        //Pageable paging = PageRequest.of(page, size);
-        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
         return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString())
                 .map(EmployeeMapper.INSTANCE::toReadDto);
     }
+
+    //-- Методи Олега --\\
 
     @GetMapping("/users/c")
     @ResponseStatus(HttpStatus.OK)
@@ -138,6 +138,8 @@ public class Controller {
     public Optional<String> getAllUsersSo() {
         return employeeService.findEmails();
     }
+
+    //-- Мої методи --\\
 
     @GetMapping("/users/byGenderAndCountry")
     @ResponseStatus(HttpStatus.OK)
@@ -160,14 +162,6 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeIsVisibleDto> getWhereIsVisibleIsNull() {
         var employees = employeeService.selectWhereIsVisibleIsNull();
-        var dto = EmployeeMapper.INSTANCE.toListIsVisibleDto(employees);
-        return dto;
-    }
-
-    @GetMapping("/users/procPrivate")
-    @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeIsVisibleDto> getEmployeeByIsPrivateIsNull() {
-        var employees = employeeService.selectEmployeeByIsPrivateIsNull();
         var dto = EmployeeMapper.INSTANCE.toListIsVisibleDto(employees);
         return dto;
     }

@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
-//@Component
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Employee findByName(String name);
@@ -19,9 +18,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @NotNull
     Page<Employee> findAll(Pageable pageable);
 
-    Page<Employee> findByName(String name, Pageable pageable);
-
     Page<Employee> findByCountryContaining(String country, Pageable pageable);
+
+    //-- Мої методи --\\
 
     @Query(value = "select * from users join addresses on users.id = addresses.employee_id " +
             "where users.gender = :gender and addresses.country = :country", nativeQuery = true)
@@ -31,8 +30,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Page<Employee> findAllWhereIsActiveAddressByCountry(String country, Pageable pageable);
 
     List<Employee> queryEmployeeByIsVisibleIsNull();
-
-    List<Employee> queryEmployeeByIsPrivateIsNull();
 
     @Query(value = "select max(id) from users", nativeQuery = true)
     Integer findMaxEmployeeId();

@@ -6,7 +6,6 @@ import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.annotations.ActivateCustomValidationAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
-import com.example.demowithtests.util.exception.ResourceIsPrivateException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotVisibleException;
 import lombok.AllArgsConstructor;
@@ -41,32 +40,14 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<Employee> getAll() {
         log.info("getAll() Service - start:");
         var employees = employeeRepository.findAll();
-        employees.stream().forEach(employee -> {
-            if (employee.getIsPrivate() == Boolean.TRUE || employee.getIsPrivate() == null)
-                setEmployeePrivateFields(employee);
-        });
         log.info("setEmployeePrivateFields() Service - end:  = size {}", employees.size());
         return employees;
-    }
-
-    private void setEmployeePrivateFields(Employee employee) {
-        log.debug("setEmployeePrivateFields() Service - start: id = {}", employee.getId());
-        employee.setName("is hidden");
-        employee.setEmail("is hidden");
-        employee.setCountry("is hidden");
-        employee.setAddresses(null);
-        employee.setGender(null);
-        log.debug("setEmployeePrivateFields() Service - end:  = employee {}", employee);
     }
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> list = employeeRepository.findAll(pageable);
-        list.stream().forEach(employee -> {
-            if (employee.getIsPrivate() == Boolean.TRUE || employee.getIsPrivate() == null)
-                setEmployeePrivateFields(employee);
-        });
         log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
@@ -75,23 +56,11 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee getById(Integer id) {
         log.info("getById(Integer id) Service - start: id = {}", id);
         var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
         changeVisibleStatus(employee);
-        changePrivateStatus(employee);
         if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
-        if (employee.getIsPrivate()) throw new ResourceIsPrivateException();
         log.info("getById(Integer id) Service - end:  = employee {}", employee);
         return employee;
-    }
-
-    private void changePrivateStatus(Employee employee) {
-        log.info("changePrivateStatus() Service - start: id = {}", employee.getId());
-        if (employee.getIsPrivate() == null) {
-            employee.setIsPrivate(Boolean.TRUE);
-            employeeRepository.save(employee);
-        }
-        log.info("changePrivateStatus() Service - end: IsPrivate = {}", employee.getIsPrivate());
     }
 
     private void changeVisibleStatus(Employee employee) {
@@ -116,8 +85,6 @@ public class EmployeeServiceBean implements EmployeeService {
                         entity.setEmail(employee.getEmail());
                     if (employee.getCountry() != null && !employee.getCountry().equals(entity.getCountry()))
                         entity.setCountry(employee.getCountry());
-                    if (employee.getIsPrivate() != null && !employee.getIsPrivate().equals(entity.getIsPrivate()))
-                        entity.setIsPrivate(employee.getIsPrivate());
                     if (employee.getPhotos() != null && !employee.getPhotos().equals(entity.getPhotos()))
                         entity.setPhotos(employee.getPhotos());
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
@@ -129,12 +96,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public void removeById(Integer id) {
-        //repository.deleteById(id);
         Employee employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
         employee.setIsVisible(Boolean.FALSE);
-        //employeeRepository.delete(employee);
         employeeRepository.save(employee);
     }
 
@@ -143,10 +107,7 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.deleteAll();
     }
 
-    /*@Override
-    public Page<Employee> findByCountryContaining(String country, Pageable pageable) {
-        return employeeRepository.findByCountryContaining(country, pageable);
-    }*/
+    //-- Методи Олега --\\
 
     @Override
     public Page<Employee> findByCountryContaining(String country, int page, int size, List<String> sortList, String sortOrder) {
@@ -177,11 +138,6 @@ public class EmployeeServiceBean implements EmployeeService {
         List<String> countries = employeeList.stream()
                 .map(country -> country.getCountry())
                 .collect(Collectors.toList());
-        /*List<String> countries = employeeList.stream()
-                .map(Employee::getCountry)
-                //.sorted(Comparator.naturalOrder())
-                .collect(Collectors.toList());*/
-
         log.info("getAllEmployeeCountry() - end: countries = {}", countries);
         return countries;
     }
@@ -211,6 +167,8 @@ public class EmployeeServiceBean implements EmployeeService {
         return Optional.ofNullable(opt);
     }
 
+    //-- Мої методи --\\
+
     @Override
     public List<Employee> getByGender(Gender gender, String country) {
         var employees = employeeRepository.findByGender(gender.toString(), country);
@@ -231,14 +189,6 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<Employee> selectEmployeeByIsPrivateIsNull() {
-        var employees = employeeRepository.queryEmployeeByIsPrivateIsNull();
-        employees.forEach(employee -> employee.setIsPrivate(Boolean.FALSE));
-        employeeRepository.saveAll(employees);
-        return employeeRepository.queryEmployeeByIsPrivateIsNull();
-    }
-
-    @Override
     public void addOneThousandEmployees() {
         log.info("addOneThousandEmployees() Service - start");
         List<Employee> employees = Collections.nCopies(1000, Employee.builder()
@@ -246,7 +196,6 @@ public class EmployeeServiceBean implements EmployeeService {
                 .email("yan@gmail.com")
                 .country("Poland")
                 .gender(Gender.M)
-                .isPrivate(Boolean.FALSE)
                 .isVisible(Boolean.TRUE)
                 .build()
         );

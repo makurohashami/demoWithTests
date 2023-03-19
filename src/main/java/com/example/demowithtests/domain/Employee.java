@@ -35,7 +35,6 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean isVisible = Boolean.TRUE;
-    private Boolean isPrivate = Boolean.FALSE;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
     private Set<Photo> photos = new HashSet<>();
