@@ -21,4 +21,5 @@ public class Photo {
     private String description;
     private String cameraType;
     private String photoUrl;
+    private Boolean isExpired = Boolean.FALSE;
 }
