@@ -1,8 +1,8 @@
 package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.dto.address.AddressDto;
-import com.example.demowithtests.dto.photo.PhotoDto;
+import com.example.demowithtests.dto.address.AddressRequestDto;
+import com.example.demowithtests.dto.photo.PhotoRequestDto;
 import com.example.demowithtests.util.annotations.BlockedEmailDomains;
 import com.example.demowithtests.util.annotations.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,10 +26,13 @@ public class EmployeeUpdateDto {
     @CountryRightFormed
     public String country;
 
+    @Schema(description = "Gender of an employee.", required = true)
     public Gender gender;
 
-    public Set<PhotoDto> photos;
+    @Schema(description = "Photos of an employee.", required = true)
+    public Set<PhotoRequestDto> photos;
 
-    public Set<AddressDto> addresses;
+    @Schema(description = "Addresses of an employee.", required = true)
+    public Set<AddressRequestDto> addresses;
 
 }
