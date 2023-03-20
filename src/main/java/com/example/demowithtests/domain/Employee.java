@@ -36,6 +36,6 @@ public class Employee {
     private Boolean isVisible = Boolean.TRUE;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
-    @OrderBy("addDate asc, id asc")
-    private Set<Photo> photos = new HashSet<>();
+    @OrderBy("creationDate asc, id asc")
+    private Set<Avatar> avatars = new HashSet<>();
 }

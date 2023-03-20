@@ -6,20 +6,25 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "photos")
+@Table(name = "avatars")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
 @Setter
 @ToString
-public class Photo {
+@Builder
+public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime addDate = LocalDateTime.now();
-    private String description;
-    private String cameraType;
-    private String photoUrl;
+    private String imgUrl;
+    private LocalDateTime creationDate = LocalDateTime.now();
     private Boolean isExpired = Boolean.FALSE;
+
+    public Avatar(String imgUrl) {
+        this.imgUrl = imgUrl;
+        this.creationDate = LocalDateTime.now();
+        this.isExpired = Boolean.FALSE;
+    }
 }
