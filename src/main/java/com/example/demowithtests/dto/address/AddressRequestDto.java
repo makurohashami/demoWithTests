@@ -5,13 +5,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class AddressRequestDto {
 
-    @Schema(description = "Name of the country.", example = "England", required = true)
+    @Schema(description = "Name of the country.", example = "England")
     public String country;
 
-    @Schema(description = "Name of the city.", example = "London", required = true)
+    @Schema(description = "Name of the city.", example = "London")
     public String city;
 
-    @Schema(description = "Name of the street.", example = "Downing Street", required = true)
+    @Schema(description = "Name of the street.", example = "Downing Street")
     public String street;
 
     @JsonIgnore
