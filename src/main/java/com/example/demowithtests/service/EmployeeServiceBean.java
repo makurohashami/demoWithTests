@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Address;
+import com.example.demowithtests.domain.Avatar;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
@@ -17,8 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +31,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
+    private final ImageFetcherService imageFetcherService;
 
     @Override
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
@@ -94,13 +96,6 @@ public class EmployeeServiceBean implements EmployeeService {
                         entity.setCountry(employee.getCountry());
                     if (isFieldNew(entity.getGender(), employee.getGender()))
                         entity.setGender(employee.getGender());
-                    if (isFieldNew(entity.getPhotos(), employee.getPhotos())) {
-                        entity.getPhotos().forEach(photo -> photo.setIsExpired(Boolean.TRUE));
-                        entity.setPhotos(Stream
-                                .concat(entity.getPhotos().stream(),
-                                        employee.getPhotos().stream())
-                                .collect(Collectors.toSet()));
-                    }
                     if (isFieldNew(entity.getAddresses(), employee.getAddresses())) {
                         entity.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
                         entity.setAddresses(Stream
@@ -241,10 +236,11 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateOneKEmployee() Service - emd: time in ms - {} ", diff);
     }
 
+    //todo Виправити логіку з фото та переробити методи під нові завдання
     //Дістає всіх користувачів в яких є фото яким 5 років без 7-ми днів, чи більше.
     @Override
     public List<Employee> findExpiredPhotos() {
-        return employeeRepository.findAll()
+        /*return employeeRepository.findAll()
                 .stream()
                 .filter(employee -> employee.getPhotos()
                         .stream()
@@ -254,18 +250,19 @@ public class EmployeeServiceBean implements EmployeeService {
                                         .minusDays(7)
                                         .isBefore(LocalDateTime.now())))
                         .anyMatch(Boolean.TRUE::equals))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        return null;
     }
 
     //Відсилає повідомлення на пошти користувачів з проханням оновити фото.
     @Override
     public Set<String> sendEmailsWhereExpiredPhotos() {
-        var expired = findExpiredPhotos();
+        /*var expired = findExpiredPhotos();
         var emails = new HashSet<String>();
         if (expired.size() > 0) {
             expired.forEach(employee -> {
                 emailSenderService.sendEmail(
-                        /*employee.getEmail(),*/ //підставляються адреси користувачів
+                        employee.getEmail(), //підставляються адреси користувачів
                         "yaroslv.kotyk@gmail.com", //підставив свою для тесту
                         "Need to update the photo",
                         String.format(
@@ -280,10 +277,47 @@ public class EmployeeServiceBean implements EmployeeService {
                 emails.add(employee.getEmail());
             });
         }
-        return emails;
+        return emails;*/
+        return null;
     }
 
+    @Override
+    public Employee saveAvatarToEmployee(Integer id, MultipartFile img) {
+        Employee employee = findEmployeeAndExpireHisAvatars(id);
+        //todo додати фото на диск, далі підставити реальний юрл
+        employee.getAvatars().add(new Avatar("http://" + UUID.randomUUID() + ".com"));
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void removeEmployeesAvatar(Integer id) {
+        employeeRepository.save(findEmployeeAndExpireHisAvatars(id));
+    }
+
+    @Override
+    public byte[] findEmployeesAvatar(Integer id) throws Exception {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        var list = employee.getAvatars()
+                .stream()
+                .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
+                .collect(Collectors.toList());
+
+        return list.isEmpty() ? new byte[0] : imageFetcherService.fetchImage(list.get(list.size() - 1).getImgUrl());
+    }
+
+
     //-- Technical Methods --\\
+
+    private Employee findEmployeeAndExpireHisAvatars(Integer id) {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        employee.getAvatars()
+                .stream()
+                .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
+                .forEach(avatar -> avatar.setIsExpired(Boolean.TRUE));
+        return employee;
+    }
 
     private void setOnlyActiveAddresses(Employee employee) {
         employee.setAddresses(employee.getAddresses()

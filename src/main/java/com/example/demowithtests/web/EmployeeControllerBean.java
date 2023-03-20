@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,7 +33,9 @@ public class EmployeeControllerBean implements EmployeeDocumented {
 
     private final EmployeeService employeeService;
 
+
     //Операция сохранения юзера в базу данных
+    @Override
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
@@ -43,12 +46,14 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     //Получение списка юзеров
+    @Override
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getAllUsers() {
         return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getAll());
     }
 
+    @Override
     @GetMapping("/users/p")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> getPage(@RequestParam(defaultValue = "0") int page,
@@ -59,6 +64,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     //Получения юзера по id
+    @Override
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
@@ -71,6 +77,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     //Обновление юзера
+    @Override
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDto dto) {
@@ -79,6 +86,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     //Удаление по id
+    @Override
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
@@ -86,12 +94,14 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     //Удаление всех юзеров
+    @Override
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllUsers() {
         employeeService.removeAll();
     }
 
+    @Override
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
@@ -105,18 +115,21 @@ public class EmployeeControllerBean implements EmployeeDocumented {
 
     //-- Методи Олега --\\
 
+    @Override
     @GetMapping("/users/c")
     @ResponseStatus(HttpStatus.OK)
     public List<String> getAllUsersC() {
         return employeeService.getAllEmployeeCountry();
     }
 
+    @Override
     @GetMapping("/users/s")
     @ResponseStatus(HttpStatus.OK)
     public List<String> getAllUsersSort() {
         return employeeService.getSortCountry();
     }
 
+    @Override
     @GetMapping("/users/emails")
     @ResponseStatus(HttpStatus.OK)
     public Optional<String> getAllUsersSo() {
@@ -125,6 +138,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
 
     //-- Мої методи --\\
 
+    @Override
     @GetMapping("/users/byGenderAndCountry")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> readByGender(@RequestParam Gender gender, @RequestParam String country) {
@@ -132,6 +146,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         return EmployeeMapper.INSTANCE.toListReadDto(employees);
     }
 
+    @Override
     @GetMapping("/users/active")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> readActiveAddressesByCountry(@RequestParam String country,
@@ -142,6 +157,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
                 .map(EmployeeMapper.INSTANCE::toReadDto);
     }
 
+    @Override
     @GetMapping("/users/procVisible")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeIsVisibleDto> getWhereIsVisibleIsNull() {
@@ -150,12 +166,14 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         return dto;
     }
 
+    @Override
     @PostMapping("/users/oneKEmployees")
     @ResponseStatus(HttpStatus.CREATED)
     public void createOneThousandEmployees() {
         employeeService.addOneThousandEmployees();
     }
 
+    @Override
     @PatchMapping("/users/patchUpdate")
     @ResponseStatus(HttpStatus.OK)
     public void updateEmployeePatch(@RequestBody @Valid EmployeeDto dto) {
@@ -163,6 +181,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         employeeService.updateOneKEmployee(employee);
     }
 
+    @Override
     @PutMapping("/users/putUpdate")
     @ResponseStatus(HttpStatus.OK)
     public void updateEmployeePut(@RequestBody @Valid EmployeeDto dto) {
@@ -170,16 +189,43 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         employeeService.updateOneKEmployee(employee);
     }
 
+    @Override
     @GetMapping("/users/expiredPhotos")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getExpiredPhotos() {
         return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findExpiredPhotos());
     }
 
+    @Override
     @PatchMapping("/users/sendEmailsByExpiredPhotos")
     @ResponseStatus(HttpStatus.OK)
     public Set<String> sendEmailsByExpiredPhotos() {
         return employeeService.sendEmailsWhereExpiredPhotos();
     }
 
+    @Override
+    @PostMapping(
+            value = "/users/{id}/avatar",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addAvatarByEmployeeId(@PathVariable("id") Integer id,
+                                                 @RequestPart("avatar") MultipartFile avatarImg) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.saveAvatarToEmployee(id, avatarImg));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/avatar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAvatarByEmployeeId(@PathVariable("id") Integer id) {
+        employeeService.removeEmployeesAvatar(id);
+    }
+
+    @Override
+    @GetMapping(
+            value = "/users/{id}/avatar",
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public byte[] readAvatarByEmployeeId(@PathVariable("id") Integer id) throws Exception {
+        return employeeService.findEmployeesAvatar(id);
+    }
 }

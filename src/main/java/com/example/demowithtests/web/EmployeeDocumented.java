@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -143,4 +144,23 @@ public interface EmployeeDocumented extends EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK.")})
     Set<String> sendEmailsByExpiredPhotos();
+
+    @Override
+    @Operation(summary = "This is endpoint to add/update avatar for employee", description = "Create request to add/update avatar for employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED."),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    EmployeeReadDto addAvatarByEmployeeId(Integer id, MultipartFile avatarImg);
+
+    @Override
+    @Operation(summary = "This is endpoint to remove avatar of employee.", description = "Create request to remove avatar of employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No Content.")})
+    void deleteAvatarByEmployeeId(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint return avatar of employee. Return JPEG file", description = "Create request to return avatar of employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK.")})
+    byte[] readAvatarByEmployeeId(Integer id) throws Exception;
 }

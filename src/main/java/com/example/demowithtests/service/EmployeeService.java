@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,4 +66,9 @@ public interface EmployeeService {
 
     Set<String> sendEmailsWhereExpiredPhotos();
 
+    Employee saveAvatarToEmployee(Integer id, MultipartFile img);
+
+    void removeEmployeesAvatar(Integer id);
+
+    byte[] findEmployeesAvatar(Integer id) throws Exception;
 }
