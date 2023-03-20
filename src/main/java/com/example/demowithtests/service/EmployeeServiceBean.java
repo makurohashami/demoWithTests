@@ -86,22 +86,22 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    if (employee.getName() != null && !employee.getName().equals(entity.getName()))
+                    if (isFieldNew(entity.getName(), employee.getName()))
                         entity.setName(employee.getName());
-                    if (employee.getEmail() != null && !employee.getEmail().equals(entity.getEmail()))
+                    if (isFieldNew(entity.getEmail(), employee.getEmail()))
                         entity.setEmail(employee.getEmail());
-                    if (employee.getCountry() != null && !employee.getCountry().equals(entity.getCountry()))
+                    if (isFieldNew(entity.getCountry(), employee.getCountry()))
                         entity.setCountry(employee.getCountry());
-                    if (employee.getGender() != null && !employee.getGender().equals(entity.getGender()))
+                    if (isFieldNew(entity.getGender(), employee.getGender()))
                         entity.setGender(employee.getGender());
-                    if (employee.getPhotos() != null && !employee.getPhotos().equals(entity.getPhotos())) {
+                    if (isFieldNew(entity.getPhotos(), employee.getPhotos())) {
                         entity.getPhotos().forEach(photo -> photo.setIsExpired(Boolean.TRUE));
                         entity.setPhotos(Stream
                                 .concat(entity.getPhotos().stream(),
                                         employee.getPhotos().stream())
                                 .collect(Collectors.toSet()));
                     }
-                    if (employee.getAddresses() != null && !employee.getAddresses().equals(entity.getAddresses())) {
+                    if (isFieldNew(entity.getAddresses(), employee.getAddresses())) {
                         entity.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
                         entity.setAddresses(Stream
                                 .concat(entity.getAddresses().stream(),
@@ -113,6 +113,10 @@ public class EmployeeServiceBean implements EmployeeService {
                     return getById(id);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    private boolean isFieldNew(Object existField, Object newField) {
+        return newField != null && !newField.equals(existField);
     }
 
     @Override
