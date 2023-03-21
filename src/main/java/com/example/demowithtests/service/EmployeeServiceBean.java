@@ -303,7 +303,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
                 .collect(Collectors.toList());
 
-        return list.isEmpty() ? new byte[0] : imageFetcherService.fetchImage(list.get(list.size() - 1).getImgUrl());
+        return list.isEmpty() ? new byte[0] : imageFetcherService.fetchImage(list.get(0).getImgUrl());
     }
 
 

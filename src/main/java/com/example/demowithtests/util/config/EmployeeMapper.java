@@ -39,9 +39,6 @@ public interface EmployeeMapper {
                 .stream()
                 .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
                 .collect(Collectors.toList());
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(list.size() - 1).getImgUrl();
+        return list.isEmpty() ? null : list.get(0).getImgUrl();
     }
 }

@@ -1,9 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
-import com.example.demowithtests.domain.Avatar;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.address.AddressResponseDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Set;
@@ -26,6 +24,5 @@ public class EmployeeReadDto {
 
     @Schema(description = "Link to avatar of an employee.")
     public String avatarUrl;
-    @JsonIgnore
-    public Set<Avatar> avatars;
+
 }
