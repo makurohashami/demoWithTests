@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -209,7 +210,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeReadDto addAvatarByEmployeeId(@PathVariable("id") Integer id,
-                                                 @RequestPart("avatar") MultipartFile avatarImg) {
+                                                 @RequestPart("avatar") MultipartFile avatarImg) throws IOException {
         return EmployeeMapper.INSTANCE.toReadDto(employeeService.saveAvatarToEmployee(id, avatarImg));
     }
 

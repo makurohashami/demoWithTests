@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -150,7 +151,7 @@ public interface EmployeeDocumented extends EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED."),
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    EmployeeReadDto addAvatarByEmployeeId(Integer id, MultipartFile avatarImg);
+    EmployeeReadDto addAvatarByEmployeeId(Integer id, MultipartFile avatarImg) throws IOException;
 
     @Override
     @Operation(summary = "This is endpoint to remove avatar of employee.", description = "Create request to remove avatar of employee", tags = {"Employee"})

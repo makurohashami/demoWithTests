@@ -1,6 +1,5 @@
 package com.example.demowithtests.util.config;
 
-import com.example.demowithtests.domain.Avatar;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
@@ -12,8 +11,6 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper
 public interface EmployeeMapper {
@@ -24,7 +21,7 @@ public interface EmployeeMapper {
 
     EmployeeDto toDto(Employee employee);
 
-    @Mapping(source = "avatars", target = "avatarUrl", qualifiedByName = "getOnlyAvatarUrl")
+    @Mapping(source = "id", target = "avatarUrl", qualifiedByName = "setAvatarUrl")
     EmployeeReadDto toReadDto(Employee employee);
 
     List<EmployeeIsVisibleDto> toListIsVisibleDto(List<Employee> employees);
@@ -33,12 +30,8 @@ public interface EmployeeMapper {
 
     Employee fromUpdateDto(EmployeeUpdateDto dto);
 
-    @Named("getOnlyAvatarUrl")
-    static String getOnlyAvatarUrl(Set<Avatar> avatars) {
-        var list = avatars
-                .stream()
-                .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
-                .collect(Collectors.toList());
-        return list.isEmpty() ? null : list.get(0).getImgUrl();
+    @Named("setAvatarUrl")
+    static String setAvatarUrl(Integer id) {
+        return "http://localhost:8087/api/users/" + id + "/avatar";
     }
 }

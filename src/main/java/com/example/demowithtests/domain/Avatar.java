@@ -18,12 +18,12 @@ public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String imgUrl;
+    private String imgName;
     private LocalDateTime creationDate = LocalDateTime.now();
     private Boolean isExpired = Boolean.FALSE;
 
-    public Avatar(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public Avatar(String imgName) {
+        this.imgName = imgName;
         this.creationDate = LocalDateTime.now();
         this.isExpired = Boolean.FALSE;
     }

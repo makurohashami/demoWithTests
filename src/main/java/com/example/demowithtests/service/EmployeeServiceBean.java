@@ -8,6 +8,7 @@ import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
+import com.example.demowithtests.util.exception.ImageException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotVisibleException;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +36,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
-    private final ImageFetcherService imageFetcherService;
+    private final FileManagerService fileManagerService;
 
     @Override
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
@@ -282,16 +287,14 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public Employee saveAvatarToEmployee(Integer id, MultipartFile img) {
-        Employee employee = findEmployeeAndExpireHisAvatars(id);
-        //todo додати фото на диск, далі підставити реальний юрл
-        employee.getAvatars().add(new Avatar("http://" + UUID.randomUUID() + ".com"));
+    public Employee saveAvatarToEmployee(Integer id, MultipartFile img) throws IOException {
+        validateImage(img);
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        var fileName = fileManagerService.saveFile(img);
+        expireEmployeesAvatars(employee);
+        employee.getAvatars().add(new Avatar(fileName));
         return employeeRepository.save(employee);
-    }
-
-    @Override
-    public void removeEmployeesAvatar(Integer id) {
-        employeeRepository.save(findEmployeeAndExpireHisAvatars(id));
     }
 
     @Override
@@ -302,21 +305,43 @@ public class EmployeeServiceBean implements EmployeeService {
                 .stream()
                 .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
                 .collect(Collectors.toList());
-
-        return list.isEmpty() ? new byte[0] : imageFetcherService.fetchImage(list.get(0).getImgUrl());
+        if (list.isEmpty())
+            throw new ResourceNotFoundException();
+        return fileManagerService.getFile(list.get(0).getImgName());
     }
 
+    @Override
+    public void removeEmployeesAvatar(Integer id) {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        expireEmployeesAvatars(employee);
+        employeeRepository.save(employee);
+    }
 
     //-- Technical Methods --\\
 
-    private Employee findEmployeeAndExpireHisAvatars(Integer id) {
-        var employee = employeeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+    private void validateImage(MultipartFile img) {
+        if (img.isEmpty()) throw new ImageException("File is empty");
+        if (!img.getContentType().equals("image/jpeg")) throw new ImageException("Image must be a JPEG");
+        try {
+            InputStream is = img.getInputStream();
+            BufferedImage image = ImageIO.read(is);
+            if (image.getWidth() > 500 || image.getHeight() > 500)
+                throw new ImageException("Image must be max a 500x500 resolution. Image is "
+                        + image.getWidth() + "x" + image.getHeight());
+            if (image.getWidth() < 100 || image.getHeight() < 100)
+                throw new ImageException("Image must be min a 100x100 resolution. Image is "
+                        + image.getWidth() + "x" + image.getHeight());
+        } catch (IOException ex) {
+            throw new ImageException(ex.getMessage());
+        }
+    }
+
+    private void expireEmployeesAvatars(Employee employee) {
         employee.getAvatars()
                 .stream()
                 .filter(avatar -> avatar.getIsExpired().equals(Boolean.FALSE))
                 .forEach(avatar -> avatar.setIsExpired(Boolean.TRUE));
-        return employee;
     }
 
     private void setOnlyActiveAddresses(Employee employee) {
