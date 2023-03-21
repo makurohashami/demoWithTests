@@ -193,8 +193,8 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     @Override
     @GetMapping("/users/expiredPhotos")
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeReadDto> getExpiredPhotos() {
-        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findExpiredPhotos());
+    public List<EmployeeReadDto> getExpiredAvatars() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findExpiredAvatars());
     }
 
     @Override

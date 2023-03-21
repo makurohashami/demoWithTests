@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -241,40 +242,38 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateOneKEmployee() Service - emd: time in ms - {} ", diff);
     }
 
-    //todo Виправити логіку з фото та переробити методи під нові завдання
-    //Дістає всіх користувачів в яких є фото яким 5 років без 7-ми днів, чи більше.
+    //Дістає всіх користувачів в яких є фото яким 5 років чи більше.
     @Override
-    public List<Employee> findExpiredPhotos() {
-        /*return employeeRepository.findAll()
+    public List<Employee> findExpiredAvatars() {
+        return employeeRepository.findAll()
                 .stream()
-                .filter(employee -> employee.getPhotos()
+                .filter(employee -> employee.getAvatars()
                         .stream()
                         .flatMap(photo -> Stream.of(
-                                photo.getAddDate()
+                                photo.getCreationDate()
                                         .plusYears(5)
-                                        .minusDays(7)
                                         .isBefore(LocalDateTime.now())))
                         .anyMatch(Boolean.TRUE::equals))
-                .collect(Collectors.toList());*/
-        return null;
+                .collect(Collectors.toList());
     }
 
-    //Відсилає повідомлення на пошти користувачів з проханням оновити фото.
+    //Робить аватарки користувача неактивними та відсилає повідомлення на пошти користувачів з оновити фото.
     @Override
     public Set<String> sendEmailsWhereExpiredPhotos() {
-        /*var expired = findExpiredPhotos();
+        var expired = findExpiredAvatars();
         var emails = new HashSet<String>();
         if (expired.size() > 0) {
             expired.forEach(employee -> {
+                expireEmployeesAvatars(employee);
                 emailSenderService.sendEmail(
-                        employee.getEmail(), //підставляються адреси користувачів
+                        /*employee.getEmail(),*/ //підставляються адреси користувачів
                         "yaroslv.kotyk@gmail.com", //підставив свою для тесту
-                        "Need to update the photo",
+                        "Your photo was deleted. Need to add a new the photo",
                         String.format(
                                 "Dear " + employee.getName() + "!\n" +
                                         "\n" +
-                                        "The expiration date of your photo is coming up soon. \n" +
-                                        "Please. Don't delay in updating it. \n" +
+                                        "Your photo expired.\n" +
+                                        "We had to delete it. Please upload a new photo. \n" +
                                         "\n" +
                                         "Best regards,\n" +
                                         "DemoApp Profile Service.")
@@ -282,8 +281,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 emails.add(employee.getEmail());
             });
         }
-        return emails;*/
-        return null;
+        return emails;
     }
 
     @Override

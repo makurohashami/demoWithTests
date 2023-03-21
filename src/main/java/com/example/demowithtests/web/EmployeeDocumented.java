@@ -138,7 +138,7 @@ public interface EmployeeDocumented extends EmployeeController {
     @Operation(summary = "This is endpoint to return employees where expired photos", description = "Create request to return employees where expired photos", tags = {"Employee"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK.")})
-    List<EmployeeReadDto> getExpiredPhotos();
+    List<EmployeeReadDto> getExpiredAvatars();
 
     @Override
     @Operation(summary = "This is endpoint sends emails to employees where expired photos", description = "Send emails to employees where expired photos", tags = {"Employee"})

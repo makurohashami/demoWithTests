@@ -54,7 +54,7 @@ public interface EmployeeController {
 
     void updateEmployeePut(EmployeeDto dto);
 
-    List<EmployeeReadDto> getExpiredPhotos();
+    List<EmployeeReadDto> getExpiredAvatars();
 
     Set<String> sendEmailsByExpiredPhotos();
 

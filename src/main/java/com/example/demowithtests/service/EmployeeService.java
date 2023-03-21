@@ -63,7 +63,7 @@ public interface EmployeeService {
 
     void updateOneKEmployee(Employee employee);
 
-    List<Employee> findExpiredPhotos();
+    List<Employee> findExpiredAvatars();
 
     Set<String> sendEmailsWhereExpiredPhotos();
 
