@@ -65,7 +65,11 @@ public interface EmployeeService {
 
     List<Employee> findExpiredAvatars();
 
+    List<Employee> findWhereAvatarWillExpireSoon();
+
     Set<String> sendEmailsWhereExpiredPhotos();
+
+    Set<String> sendEmailsWhereAvatarWillExpireSoon();
 
     Employee saveAvatarToEmployee(Integer id, MultipartFile img) throws IOException;
 

@@ -63,4 +63,8 @@ public interface EmployeeController {
     void deleteAvatarByEmployeeId(Integer id);
 
     byte[] readAvatarByEmployeeId(Integer id) throws Exception;
+
+    List<EmployeeReadDto> getSoonExpiredAvatars();
+
+    Set<String> sendEmailsBySoonExpiredPhotos();
 }

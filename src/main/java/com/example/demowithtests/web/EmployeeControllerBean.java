@@ -198,10 +198,24 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     @Override
+    @GetMapping("/users/soonExpiredPhotos")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeReadDto> getSoonExpiredAvatars() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.findWhereAvatarWillExpireSoon());
+    }
+
+    @Override
     @PatchMapping("/users/sendEmailsByExpiredPhotos")
     @ResponseStatus(HttpStatus.OK)
     public Set<String> sendEmailsByExpiredPhotos() {
         return employeeService.sendEmailsWhereExpiredPhotos();
+    }
+
+    @Override
+    @PatchMapping("/users/sendEmailsBySoonExpiredPhotos")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<String> sendEmailsBySoonExpiredPhotos() {
+        return employeeService.sendEmailsWhereAvatarWillExpireSoon();
     }
 
     @Override

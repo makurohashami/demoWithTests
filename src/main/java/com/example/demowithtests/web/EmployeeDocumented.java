@@ -164,4 +164,16 @@ public interface EmployeeDocumented extends EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK.")})
     byte[] readAvatarByEmployeeId(Integer id) throws Exception;
+
+    @Override
+    @Operation(summary = "This is endpoint to return employees where photos will expire soon", description = "Create request to return employees where photos will expire soon", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK.")})
+    List<EmployeeReadDto> getSoonExpiredAvatars();
+
+    @Override
+    @Operation(summary = "This is endpoint sends emails to employees where photos will expire soon", description = "Send emails to employees where photos will expire soon", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK.")})
+    Set<String> sendEmailsBySoonExpiredPhotos();
 }

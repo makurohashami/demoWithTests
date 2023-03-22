@@ -247,13 +247,9 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<Employee> findExpiredAvatars() {
         return employeeRepository.findAll()
                 .stream()
-                .filter(employee -> employee.getAvatars()
-                        .stream()
-                        .flatMap(photo -> Stream.of(
-                                photo.getCreationDate()
-                                        .plusYears(5)
-                                        .isBefore(LocalDateTime.now())))
-                        .anyMatch(Boolean.TRUE::equals))
+                .filter(employee -> employee.getAvatars().stream()
+                        .anyMatch(avatar -> !avatar.getIsExpired()
+                                && avatar.getCreationDate().plusYears(5).isBefore(LocalDateTime.now())))
                 .collect(Collectors.toList());
     }
 
@@ -262,9 +258,8 @@ public class EmployeeServiceBean implements EmployeeService {
     public Set<String> sendEmailsWhereExpiredPhotos() {
         var expired = findExpiredAvatars();
         var emails = new HashSet<String>();
-        if (expired.size() > 0) {
+        if (!expired.isEmpty()) {
             expired.forEach(employee -> {
-                expireEmployeesAvatars(employee);
                 emailSenderService.sendEmail(
                         /*employee.getEmail(),*/ //підставляються адреси користувачів
                         "yaroslv.kotyk@gmail.com", //підставив свою для тесту
@@ -278,6 +273,7 @@ public class EmployeeServiceBean implements EmployeeService {
                                         "Best regards,\n" +
                                         "DemoApp Profile Service.")
                 );
+                expireEmployeesAvatars(employee);
                 emails.add(employee.getEmail());
             });
         }
@@ -314,6 +310,41 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(ResourceNotFoundException::new);
         expireEmployeesAvatars(employee);
         employeeRepository.save(employee);
+    }
+
+    @Override
+    public List<Employee> findWhereAvatarWillExpireSoon() {
+        return employeeRepository.findAll().stream()
+                .filter(employee -> employee.getAvatars().stream()
+                        .anyMatch(avatar -> !avatar.getIsExpired()
+                                && avatar.getCreationDate().plusYears(5).minusDays(7).isBefore(LocalDateTime.now())
+                                && avatar.getCreationDate().plusYears(5).isAfter(LocalDateTime.now())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<String> sendEmailsWhereAvatarWillExpireSoon() {
+        var expired = findWhereAvatarWillExpireSoon();
+        var emails = new HashSet<String>();
+        if (!expired.isEmpty()) {
+            expired.forEach(employee -> {
+                emailSenderService.sendEmail(
+                        /*employee.getEmail(),*/ //підставляються адреси користувачів
+                        "yaroslv.kotyk@gmail.com", //підставив свою для тесту
+                        "Need to update the photo",
+                        String.format(
+                                "Dear " + employee.getName() + "!\n" +
+                                        "\n" +
+                                        "The expiration date of your photo is coming up soon. \n" +
+                                        "Please. Don't delay in updating it. \n" +
+                                        "\n" +
+                                        "Best regards,\n" +
+                                        "DemoApp Profile Service.")
+                );
+                emails.add(employee.getEmail());
+            });
+        }
+        return emails;
     }
 
     //-- Technical Methods --\\
