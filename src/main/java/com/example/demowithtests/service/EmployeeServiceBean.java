@@ -68,6 +68,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(ResourceNotFoundException::new);
         changeVisibleStatus(employee);
         setOnlyActiveAddresses(employee);
+        setOnlyNotExpiredAvatars(employee);
         if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
         return employee;
     }
@@ -362,6 +363,15 @@ public class EmployeeServiceBean implements EmployeeService {
         employee.setAddresses(employee.getAddresses()
                 .stream()
                 .filter(Address::getAddressHasActive)
+                .collect(Collectors.toSet()));
+    }
+
+    private void setOnlyNotExpiredAvatars(Employee employee) {
+        employee.setAvatars(employee.getAvatars()
+                .stream()
+                .filter(avatar ->
+                        avatar.getIsExpired()
+                                .equals(Boolean.FALSE))
                 .collect(Collectors.toSet()));
     }
 
