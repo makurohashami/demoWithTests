@@ -12,7 +12,7 @@ import com.example.demowithtests.util.exception.ImageException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotVisibleException;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
-@Slf4j
+@Log4j2
 @Service
 public class EmployeeServiceBean implements EmployeeService {
 
@@ -47,51 +47,42 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
-        log.info("getAll() Service - start:");
         var employees = employeeRepository.findAll();
         employees.forEach(this::setOnlyActiveAddresses);
-        log.info("setEmployeePrivateFields() Service - end:  = size {}", employees.size());
         return employees;
     }
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
-        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> page = employeeRepository.findAll(pageable);
         page.map(employee -> {
             setOnlyActiveAddresses(employee);
             return employee;
         });
-        log.debug("getAllWithPagination() - end: page = {}", page);
         return page;
     }
 
     @Override
     public Employee getById(Integer id) {
-        log.info("getById(Integer id) Service - start: id = {}", id);
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         changeVisibleStatus(employee);
         setOnlyActiveAddresses(employee);
         if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
-        log.info("getById(Integer id) Service - end:  = employee {}", employee);
         return employee;
     }
 
     private void changeVisibleStatus(Employee employee) {
-        log.info("changeVisibleStatus() Service - start: id = {}", employee.getId());
         if (employee.getIsVisible() == null) {
             employee.setIsVisible(Boolean.TRUE);
             employeeRepository.save(employee);
         }
-        log.info("changeVisibleStatus() Service - end: isVisible = {}", employee.getIsVisible());
     }
 
     @Override
     @Transactional
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
     public Employee updateById(Integer id, Employee employee) {
-        log.info("updateById(Integer id, Employee employee) Service start - id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
                     if (isFieldNew(entity.getName(), employee.getName()))
@@ -110,7 +101,6 @@ public class EmployeeServiceBean implements EmployeeService {
                                 .collect(Collectors.toSet()));
                     }
                     employeeRepository.save(entity);
-                    log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
                     return getById(id);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
@@ -160,12 +150,10 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<String> getAllEmployeeCountry() {
-        log.info("getAllEmployeeCountry() - start:");
         List<Employee> employeeList = employeeRepository.findAll();
         List<String> countries = employeeList.stream()
                 .map(country -> country.getCountry())
                 .collect(Collectors.toList());
-        log.info("getAllEmployeeCountry() - end: countries = {}", countries);
         return countries;
     }
 
@@ -217,7 +205,6 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public void addOneThousandEmployees() {
-        log.info("addOneThousandEmployees() Service - start");
         List<Employee> employees = Collections.nCopies(1000, Employee.builder()
                 .name("Yan")
                 .email("yan@gmail.com")
@@ -227,12 +214,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .build()
         );
         employeeRepository.saveAll(employees);
-        log.info("addOneThousandEmployees() Service - end: list size - {}", employees.size());
     }
 
     @Override
     public void updateOneKEmployee(Employee employee) {
-        log.info("updateOneKEmployee() Service - start: employee - {} ", employee);
         Long methodStart = System.currentTimeMillis();
         Integer maxId = employeeRepository.findMaxEmployeeId();
         for (int i = maxId - 999; i <= maxId; ++i) {

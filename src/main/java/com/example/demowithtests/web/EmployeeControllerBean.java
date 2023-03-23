@@ -28,7 +28,6 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-@Slf4j
 @Tag(name = "Employee", description = "Employee API")
 public class EmployeeControllerBean implements EmployeeDocumented {
 
@@ -69,11 +68,8 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        log.debug("getEmployeeById() Controller - start: id = {}", id);
         var employee = employeeService.getById(id);
-        log.debug("getById() Controller - to dto start: id = {}", id);
         var dto = EmployeeMapper.INSTANCE.toReadDto(employee);
-        log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
         return dto;
     }
 
