@@ -12,7 +12,7 @@ import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
 import com.example.demowithtests.util.exception.ImageException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
-import com.example.demowithtests.util.exception.ResourceNotVisibleException;
+import com.example.demowithtests.util.exception.ResourceUnavailableException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -71,7 +71,7 @@ public class EmployeeServiceBean implements EmployeeService {
         changeVisibleStatus(employee);
         setOnlyActiveAddresses(employee);
         setOnlyNotExpiredAvatars(employee);
-        if (!employee.getIsVisible()) throw new ResourceNotVisibleException();
+        if (!employee.getIsVisible()) throw new ResourceUnavailableException();
         return employee;
     }
 

@@ -34,11 +34,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(ResourceNotVisibleException.class)
+    @ExceptionHandler(ResourceUnavailableException.class)
     public ResponseEntity<?> resourceNotVisibleException(WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Resource not visible",
+                "Resource unavailable",
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
