@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.fileManagerService;
 
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;

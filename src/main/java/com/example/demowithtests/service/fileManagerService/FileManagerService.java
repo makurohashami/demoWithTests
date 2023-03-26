@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.fileManagerService;
 
 import org.springframework.web.multipart.MultipartFile;
 

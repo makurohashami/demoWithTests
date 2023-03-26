@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;

@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.emailSevice;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;

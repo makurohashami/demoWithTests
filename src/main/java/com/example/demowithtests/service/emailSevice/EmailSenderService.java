@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.emailSevice;
 
 import org.springframework.mail.MailException;
 

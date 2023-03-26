@@ -1,10 +1,12 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Avatar;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.fileManagerService.FileManagerService;
+import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
