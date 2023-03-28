@@ -1,6 +1,5 @@
 package com.example.demowithtests.web.workPassController;
 
-import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.util.exception.ErrorDetails;

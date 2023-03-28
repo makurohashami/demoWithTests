@@ -1,4 +1,4 @@
-package com.example.demowithtests.util;
+package com.example.demowithtests.util.logging;
 
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
