@@ -16,7 +16,7 @@ import java.util.Collection;
 @Component
 public class LoggingServiceClassesAspect {
 
-    @Pointcut("execution(public * com.example.demowithtests.service.*.*(..))")
+    @Pointcut("execution(public * com.example.demowithtests.service.*.*.*(..))")
     public void callAtMyServicesPublicMethods() {
     }
 

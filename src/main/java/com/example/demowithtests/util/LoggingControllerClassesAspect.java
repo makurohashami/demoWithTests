@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingControllerClassesAspect {
 
-    @Pointcut("execution(public * com.example.demowithtests.web.*.*(..))")
+    @Pointcut("execution(public * com.example.demowithtests.web.*.*.*(..))")
     public void callAtMyControllersPublicMethods() {
     }
 
