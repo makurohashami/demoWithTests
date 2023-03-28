@@ -1,5 +1,6 @@
 package com.example.demowithtests.web.workPassController;
 
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.util.exception.ErrorDetails;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.List;
 
 @Tag(name = "WorkPass", description = "Employee API")
 public interface WorkPassDocumented extends WorkPassController {
@@ -41,4 +44,10 @@ public interface WorkPassDocumented extends WorkPassController {
             @ApiResponse(responseCode = "204", description = "OK. Employee deleted."),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified work pass request not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
     void deletePass(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint to return expired work passes", description = "Create request to return return expired work passes", tags = {"WorkPass"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK.")})
+    List<WorkPassResponse> getAllExpiredWorkPasses();
 }

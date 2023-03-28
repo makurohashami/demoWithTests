@@ -6,6 +6,8 @@ import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface WorkPassMapper {
 
@@ -14,4 +16,6 @@ public interface WorkPassMapper {
     WorkPass fromRequest(WorkPassRequest request);
 
     WorkPassResponse toResponse(WorkPass workPass);
+
+    List<WorkPassResponse> toResponseList(List<WorkPass> workPasses);
 }

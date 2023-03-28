@@ -7,6 +7,10 @@ import com.example.demowithtests.util.exception.ResourceUnavailableException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class WorkPassServiceBean implements WorkPassService {
@@ -52,5 +56,18 @@ public class WorkPassServiceBean implements WorkPassService {
         if (pass.getIsDeleted() || pass.getEmployee() != null)
             throw new ResourceUnavailableException();
         return pass;
+    }
+
+    //--Processors--\\
+    @Override
+    public List<WorkPass> getAllExpiredWorkPasses() {
+        var expiredPasses = passRepository.findAll()
+                .stream()
+                .filter(pass -> pass.getExpireDate().isBefore(LocalDateTime.now()))
+                .filter(pass -> pass.getIsDeleted().equals(Boolean.FALSE))
+                .collect(Collectors.toList());
+        expiredPasses.forEach(pass -> pass.setIsDeleted(Boolean.TRUE));
+        passRepository.saveAll(expiredPasses);
+        return expiredPasses;
     }
 }

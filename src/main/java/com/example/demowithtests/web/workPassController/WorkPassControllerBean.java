@@ -1,5 +1,6 @@
 package com.example.demowithtests.web.workPassController;
 
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.service.workPassService.WorkPassService;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -44,5 +47,12 @@ public class WorkPassControllerBean implements WorkPassDocumented {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePass(@PathVariable Integer id) {
         passService.removePass(id);
+    }
+
+    @Override
+    @GetMapping("/passes/expired")
+    @ResponseStatus(HttpStatus.OK)
+    public List<WorkPassResponse> getAllExpiredWorkPasses() {
+        return WorkPassMapper.INSTANCE.toResponseList(passService.getAllExpiredWorkPasses());
     }
 }
