@@ -38,4 +38,7 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     @OrderBy("creationDate desc")
     private Set<Avatar> avatars = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pass_id", referencedColumnName = "id")
+    private WorkPass workPass;
 }

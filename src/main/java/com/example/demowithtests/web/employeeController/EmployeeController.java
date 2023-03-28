@@ -1,4 +1,4 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.employee.EmployeeDto;
@@ -67,4 +67,8 @@ public interface EmployeeController {
     List<EmployeeReadDto> getSoonExpiredAvatars();
 
     Set<String> sendEmailsBySoonExpiredPhotos();
+
+    EmployeeReadDto addWorkPassToEmployee(Integer employeeId, Integer passId);
+
+    void deletePassFromEmployee(Integer id);
 }

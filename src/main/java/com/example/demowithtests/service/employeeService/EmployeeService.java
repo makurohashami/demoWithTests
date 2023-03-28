@@ -76,4 +76,9 @@ public interface EmployeeService {
     void removeEmployeesAvatar(Integer id);
 
     byte[] findEmployeesAvatar(Integer id) throws Exception;
+
+    Employee addWorkPassToEmployee(Integer employeeId, Integer passId);
+
+    void deletePassFromEmployee(Integer id);
+
 }

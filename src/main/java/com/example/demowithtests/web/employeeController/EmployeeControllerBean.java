@@ -1,4 +1,4 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.employee.EmployeeDto;
@@ -7,7 +7,6 @@ import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.employeeService.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeMapper;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,6 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Employee", description = "Employee API")
 public class EmployeeControllerBean implements EmployeeDocumented {
 
     private final EmployeeService employeeService;
@@ -237,5 +235,20 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     @ResponseStatus(HttpStatus.OK)
     public byte[] readAvatarByEmployeeId(@PathVariable("id") Integer id) throws Exception {
         return employeeService.findEmployeesAvatar(id);
+    }
+
+    @Override
+    @PostMapping("/users/{e_id}/passes/{p_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeReadDto addWorkPassToEmployee(@PathVariable("e_id") Integer employeeId,
+                                                 @PathVariable("p_id") Integer passId) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(employeeId, passId));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/pass")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePassFromEmployee(@PathVariable Integer id) {
+        employeeService.deletePassFromEmployee(id);
     }
 }

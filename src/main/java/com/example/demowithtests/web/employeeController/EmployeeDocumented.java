@@ -1,4 +1,4 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.employee.EmployeeDto;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Tag(name = "Employee", description = "Employee API")
 public interface EmployeeDocumented extends EmployeeController {
 
     @Override
@@ -176,4 +178,19 @@ public interface EmployeeDocumented extends EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK.")})
     Set<String> sendEmailsBySoonExpiredPhotos();
+
+    @Override
+    @Operation(summary = "This is endpoint to add/update work pass for employee", description = "Create request to add/update work pass for employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    EmployeeReadDto addWorkPassToEmployee(Integer employeeId, Integer passId);
+
+    @Override
+    @Operation(summary = "This is endpoint to remove work pass for of employee.", description = "Create request to remove work pass for of employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No Content."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    void deletePassFromEmployee(Integer id);
 }

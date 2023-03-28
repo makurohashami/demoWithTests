@@ -5,8 +5,9 @@ import com.example.demowithtests.domain.Avatar;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.service.fileManagerService.FileManagerService;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
+import com.example.demowithtests.service.fileManagerService.FileManagerService;
+import com.example.demowithtests.service.workPassService.WorkPassService;
 import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
@@ -40,6 +41,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
     private final FileManagerService fileManagerService;
+    private final WorkPassService passService;
 
     @Override
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
@@ -51,6 +53,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<Employee> getAll() {
         var employees = employeeRepository.findAll();
         employees.forEach(this::setOnlyActiveAddresses);
+        employees.forEach(this::checkPassIsAvailable);
         return employees;
     }
 
@@ -59,6 +62,7 @@ public class EmployeeServiceBean implements EmployeeService {
         Page<Employee> page = employeeRepository.findAll(pageable);
         page.map(employee -> {
             setOnlyActiveAddresses(employee);
+            checkPassIsAvailable(employee);
             return employee;
         });
         return page;
@@ -68,11 +72,19 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+        checkPassIsAvailable(employee);
         changeVisibleStatus(employee);
         setOnlyActiveAddresses(employee);
         setOnlyNotExpiredAvatars(employee);
         if (!employee.getIsVisible()) throw new ResourceUnavailableException();
         return employee;
+    }
+
+    private void checkPassIsAvailable(Employee employee) {
+        if (employee.getWorkPass() != null && employee.getWorkPass().getIsDeleted().equals(Boolean.TRUE)) {
+            employee.setWorkPass(null);
+            employeeRepository.save(employee);
+        }
     }
 
     private void changeVisibleStatus(Employee employee) {
@@ -119,6 +131,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(ResourceNotFoundException::new);
         employee.setIsVisible(Boolean.FALSE);
         employee.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
+        passService.removePass(employee.getWorkPass().getId());
         employeeRepository.save(employee);
     }
 
@@ -375,6 +388,28 @@ public class EmployeeServiceBean implements EmployeeService {
                         avatar.getIsExpired()
                                 .equals(Boolean.FALSE))
                 .collect(Collectors.toSet()));
+    }
+
+    @Override
+    public Employee addWorkPassToEmployee(Integer employeeId, Integer passId) {
+        var pass = passService.getAvailablePass(passId);
+        pass.setExpireDate(LocalDateTime.now().plusYears(2));
+        var employee = employeeRepository.findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        employee.setWorkPass(pass);
+        employeeRepository.save(employee);
+        return getById(employeeId);
+    }
+
+    @Override
+    public void deletePassFromEmployee(Integer id) {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (employee.getWorkPass() != null) {
+            passService.removePass(employee.getWorkPass().getId());
+            employee.setWorkPass(null);
+        }
+        employeeRepository.save(employee);
     }
 
 }

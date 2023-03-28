@@ -2,6 +2,7 @@ package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.address.AddressResponseDto;
+import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Set;
@@ -25,4 +26,6 @@ public class EmployeeReadDto {
     @Schema(description = "Link to avatar of an employee.")
     public String avatarUrl;
 
+    @Schema(description = "Work pass of an employee.")
+    public WorkPassResponse workPass;
 }
