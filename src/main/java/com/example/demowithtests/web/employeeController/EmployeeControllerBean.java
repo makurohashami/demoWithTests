@@ -1,6 +1,7 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -238,14 +239,22 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     @Override
-    @PostMapping("/users/{id}/pass")
+    @PostMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id) {
         return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id));
     }
 
     @Override
-    @PatchMapping("/users/{id}/pass")
+    @PostMapping("/users/{id}/passes/form")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id,
+                                                 @RequestBody WorkPass pass) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id, pass));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePassFromEmployee(@PathVariable Integer id) {
         employeeService.deletePassFromEmployee(id);

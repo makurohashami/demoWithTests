@@ -1,9 +1,6 @@
 package com.example.demowithtests.service.employeeService;
 
-import com.example.demowithtests.domain.Address;
-import com.example.demowithtests.domain.Avatar;
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.*;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.service.fileManagerService.FileManagerService;
@@ -398,6 +395,17 @@ public class EmployeeServiceBean implements EmployeeService {
         employee.setWorkPass(passService.getFree());
         employee.getWorkPass().setIsFree(Boolean.FALSE);
         employee.getWorkPass().setExpireDate(LocalDateTime.now().plusYears(2));
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee addWorkPassToEmployee(Integer id, WorkPass pass) {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        deletePassFromEmployee(id);
+        pass.setIsFree(Boolean.FALSE);
+        pass.setExpireDate(LocalDateTime.now().plusYears(2));
+        employee.setWorkPass(passService.addPass(pass));
         return employeeRepository.save(employee);
     }
 

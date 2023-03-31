@@ -1,6 +1,7 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -183,9 +184,16 @@ public interface EmployeeDocumented extends EmployeeController {
     @Operation(summary = "This is endpoint to add/update work pass for employee", description = "Create request to add/update work pass for employee", tags = {"Employee"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    EmployeeReadDto addWorkPassToEmployee(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint to add/update work pass for employee", description = "Create request to add/update work pass for employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class))),
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    EmployeeReadDto addWorkPassToEmployee(Integer id);
+    EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPass pass);
 
     @Override
     @Operation(summary = "This is endpoint to remove work pass for of employee.", description = "Create request to remove work pass for of employee", tags = {"Employee"})

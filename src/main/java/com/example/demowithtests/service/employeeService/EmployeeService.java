@@ -2,6 +2,7 @@ package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.WorkPass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +79,8 @@ public interface EmployeeService {
     byte[] findEmployeesAvatar(Integer id) throws Exception;
 
     Employee addWorkPassToEmployee(Integer id);
+
+    Employee addWorkPassToEmployee(Integer id, WorkPass pass);
 
     void deletePassFromEmployee(Integer id);
 
