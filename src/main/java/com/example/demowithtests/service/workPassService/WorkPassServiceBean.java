@@ -50,12 +50,12 @@ public class WorkPassServiceBean implements WorkPassService {
     }
 
     @Override
-    public WorkPass getAvailablePass(Integer id) {
-        var pass = passRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
-        if (pass.getIsDeleted() || pass.getEmployee() != null)
-            throw new ResourceUnavailableException();
-        return pass;
+    public WorkPass getFree() {
+        return passRepository.findAll()
+                .stream()
+                .filter(p -> p.getIsFree() && !p.getIsDeleted())
+                .findFirst()
+                .orElseGet(() -> addPass(new WorkPass()));
     }
 
     //--Processors--\\

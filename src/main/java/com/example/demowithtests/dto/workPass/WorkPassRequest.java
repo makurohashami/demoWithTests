@@ -15,4 +15,6 @@ public class WorkPassRequest {
     public String uuid = UUID.randomUUID().toString();
     @JsonIgnore
     public Boolean isDeleted = Boolean.FALSE;
+    @JsonIgnore
+    public Boolean isFree = Boolean.TRUE;
 }

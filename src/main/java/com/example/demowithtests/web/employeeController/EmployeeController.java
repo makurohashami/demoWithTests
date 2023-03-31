@@ -68,7 +68,7 @@ public interface EmployeeController {
 
     Set<String> sendEmailsBySoonExpiredPhotos();
 
-    EmployeeReadDto addWorkPassToEmployee(Integer employeeId, Integer passId);
+    EmployeeReadDto addWorkPassToEmployee(Integer id);
 
     void deletePassFromEmployee(Integer id);
 }

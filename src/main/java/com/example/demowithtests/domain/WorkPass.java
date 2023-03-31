@@ -22,9 +22,10 @@ public class WorkPass {
     private Integer id;
     private String uuid = UUID.randomUUID().toString();
     @Enumerated(EnumType.STRING)
-    private AccessLevel accessLevel;
-    private LocalDateTime expireDate = LocalDateTime.now().plusYears(2);
+    private AccessLevel accessLevel = AccessLevel.A1;
+    private LocalDateTime expireDate;
     @OneToOne(mappedBy = "workPass")
     private Employee employee;
     private Boolean isDeleted = Boolean.FALSE;
+    private Boolean isFree = Boolean.TRUE;
 }

@@ -185,7 +185,7 @@ public interface EmployeeDocumented extends EmployeeController {
             @ApiResponse(responseCode = "201", description = "CREATED."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class))),
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    EmployeeReadDto addWorkPassToEmployee(Integer employeeId, Integer passId);
+    EmployeeReadDto addWorkPassToEmployee(Integer id);
 
     @Override
     @Operation(summary = "This is endpoint to remove work pass for of employee.", description = "Create request to remove work pass for of employee", tags = {"Employee"})

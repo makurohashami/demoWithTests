@@ -391,14 +391,14 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public Employee addWorkPassToEmployee(Integer employeeId, Integer passId) {
-        var pass = passService.getAvailablePass(passId);
-        pass.setExpireDate(LocalDateTime.now().plusYears(2));
-        var employee = employeeRepository.findById(employeeId)
+    public Employee addWorkPassToEmployee(Integer id) {
+        var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        employee.setWorkPass(pass);
-        employeeRepository.save(employee);
-        return getById(employeeId);
+        deletePassFromEmployee(id);
+        employee.setWorkPass(passService.getFree());
+        employee.getWorkPass().setIsFree(Boolean.FALSE);
+        employee.getWorkPass().setExpireDate(LocalDateTime.now().plusYears(2));
+        return employeeRepository.save(employee);
     }
 
     @Override

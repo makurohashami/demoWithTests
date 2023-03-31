@@ -238,11 +238,10 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     @Override
-    @PostMapping("/users/{e_id}/passes/{p_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDto addWorkPassToEmployee(@PathVariable("e_id") Integer employeeId,
-                                                 @PathVariable("p_id") Integer passId) {
-        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(employeeId, passId));
+    @PostMapping("/users/{id}/pass")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id));
     }
 
     @Override

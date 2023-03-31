@@ -14,7 +14,7 @@ public interface WorkPassService {
 
     void removePass(Integer id);
 
-    WorkPass getAvailablePass(Integer id);
+    WorkPass getFree();
 
     List<WorkPass> getAllExpiredWorkPasses();
 }

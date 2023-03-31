@@ -77,7 +77,7 @@ public interface EmployeeService {
 
     byte[] findEmployeesAvatar(Integer id) throws Exception;
 
-    Employee addWorkPassToEmployee(Integer employeeId, Integer passId);
+    Employee addWorkPassToEmployee(Integer id);
 
     void deletePassFromEmployee(Integer id);
 
