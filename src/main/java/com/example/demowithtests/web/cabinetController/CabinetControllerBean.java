@@ -3,7 +3,7 @@ package com.example.demowithtests.web.cabinetController;
 import com.example.demowithtests.dto.cabinet.CabinetRequest;
 import com.example.demowithtests.dto.cabinet.CabinetResponse;
 import com.example.demowithtests.service.cabinetService.CabinetService;
-import com.example.demowithtests.util.config.CabinetMapper;
+import com.example.demowithtests.util.mappers.CabinetMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

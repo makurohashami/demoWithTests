@@ -7,7 +7,7 @@ import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.employeeService.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeMapper;
+import com.example.demowithtests.util.mappers.EmployeeMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

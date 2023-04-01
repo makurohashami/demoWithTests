@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.Cabinet;
 import com.example.demowithtests.dto.cabinet.CabinetRequest;

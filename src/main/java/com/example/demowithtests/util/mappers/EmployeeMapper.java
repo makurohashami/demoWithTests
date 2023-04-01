@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
