@@ -2,6 +2,7 @@ package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.domain.WorkPass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -78,10 +79,10 @@ public interface EmployeeService {
 
     byte[] findEmployeesAvatar(Integer id) throws Exception;
 
-    Employee addWorkPassToEmployee(Integer id);
+    Employee addWorkPassToEmployee(Integer id, PassStatus passDeleteStatus);
 
-    Employee addWorkPassToEmployee(Integer id, WorkPass pass);
+    Employee addWorkPassToEmployee(Integer id, WorkPass pass, PassStatus passDeleteStatus);
 
-    void deletePassFromEmployee(Integer id);
+    void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
 
 }

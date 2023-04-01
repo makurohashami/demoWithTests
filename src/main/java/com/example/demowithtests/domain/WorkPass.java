@@ -24,8 +24,14 @@ public class WorkPass {
     @Enumerated(EnumType.STRING)
     private AccessLevel accessLevel = AccessLevel.A1;
     private LocalDateTime expireDate;
+    @ToString.Exclude
     @OneToOne(mappedBy = "workPass")
     private Employee employee;
     private Boolean isDeleted = Boolean.FALSE;
     private Boolean isFree = Boolean.TRUE;
+    @Enumerated(EnumType.STRING)
+    private PassStatus passStatus = PassStatus.ACTIVE;
+    private LocalDateTime deleteDate;
+    @OneToOne(fetch = FetchType.EAGER)
+    private WorkPass prevPass;
 }

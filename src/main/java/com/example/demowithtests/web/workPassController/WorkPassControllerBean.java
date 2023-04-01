@@ -1,5 +1,6 @@
 package com.example.demowithtests.web.workPassController;
 
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.service.workPassService.WorkPassService;
@@ -45,7 +46,7 @@ public class WorkPassControllerBean implements WorkPassDocumented {
     @PatchMapping("/passes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePass(@PathVariable Integer id) {
-        passService.removePass(id);
+        passService.removePass(id, PassStatus.EXPIRED);
     }
 
     @Override

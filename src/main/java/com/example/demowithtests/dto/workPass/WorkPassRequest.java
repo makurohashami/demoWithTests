@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto.workPass;
 
 import com.example.demowithtests.domain.AccessLevel;
+import com.example.demowithtests.domain.PassStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -17,4 +18,6 @@ public class WorkPassRequest {
     public Boolean isDeleted = Boolean.FALSE;
     @JsonIgnore
     public Boolean isFree = Boolean.TRUE;
+    @JsonIgnore
+    public PassStatus passStatus = PassStatus.ACTIVE;
 }

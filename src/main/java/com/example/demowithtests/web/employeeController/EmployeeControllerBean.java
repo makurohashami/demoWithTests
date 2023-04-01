@@ -1,13 +1,15 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.domain.WorkPass;
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
+import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.service.employeeService.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeMapper;
+import com.example.demowithtests.util.config.WorkPassMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -241,22 +243,26 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     @Override
     @PostMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id) {
-        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id));
+    public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id,
+                                                 @RequestParam(name = "deleteStatus", defaultValue = "EXCHANGED") PassStatus passDeleteStatus) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id, passDeleteStatus));
     }
 
     @Override
     @PostMapping("/users/{id}/passes/form")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeReadDto addWorkPassToEmployee(@PathVariable Integer id,
-                                                 @RequestBody WorkPass pass) {
-        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id, pass));
+                                                 @RequestBody WorkPassRequest request,
+                                                 @RequestParam(name = "deleteStatus", defaultValue = "EXCHANGED") PassStatus passDeleteStatus) {
+        var pass = WorkPassMapper.INSTANCE.fromRequest(request);
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addWorkPassToEmployee(id, pass, passDeleteStatus));
     }
 
     @Override
     @PatchMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePassFromEmployee(@PathVariable Integer id) {
-        employeeService.deletePassFromEmployee(id);
+    public void deletePassFromEmployee(@PathVariable Integer id,
+                                       @RequestParam(name = "deleteStatus", defaultValue = "EXPIRED") PassStatus passDeleteStatus) {
+        employeeService.deletePassFromEmployee(id, passDeleteStatus);
     }
 }

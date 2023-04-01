@@ -128,7 +128,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(ResourceNotFoundException::new);
         employee.setIsVisible(Boolean.FALSE);
         employee.getAddresses().forEach(address -> address.setAddressHasActive(Boolean.FALSE));
-        passService.removePass(employee.getWorkPass().getId());
+        passService.removePass(employee.getWorkPass().getId(), PassStatus.EXPIRED);
         employeeRepository.save(employee);
     }
 
@@ -388,33 +388,36 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public Employee addWorkPassToEmployee(Integer id) {
+    public Employee addWorkPassToEmployee(Integer id, PassStatus passDeleteStatus) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        deletePassFromEmployee(id);
-        employee.setWorkPass(passService.getFree());
+        var newPass = passService.getFree();
+        newPass.setPrevPass(employee.getWorkPass());
+        deletePassFromEmployee(id, passDeleteStatus);
+        employee.setWorkPass(newPass);
         employee.getWorkPass().setIsFree(Boolean.FALSE);
         employee.getWorkPass().setExpireDate(LocalDateTime.now().plusYears(2));
         return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee addWorkPassToEmployee(Integer id, WorkPass pass) {
+    public Employee addWorkPassToEmployee(Integer id, WorkPass pass, PassStatus passDeleteStatus) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        deletePassFromEmployee(id);
+        pass.setPrevPass(employee.getWorkPass());
         pass.setIsFree(Boolean.FALSE);
         pass.setExpireDate(LocalDateTime.now().plusYears(2));
+        deletePassFromEmployee(id, passDeleteStatus);
         employee.setWorkPass(passService.addPass(pass));
         return employeeRepository.save(employee);
     }
 
     @Override
-    public void deletePassFromEmployee(Integer id) {
+    public void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         if (employee.getWorkPass() != null) {
-            passService.removePass(employee.getWorkPass().getId());
+            passService.removePass(employee.getWorkPass().getId(), passDeleteStatus);
             employee.setWorkPass(null);
         }
         employeeRepository.save(employee);

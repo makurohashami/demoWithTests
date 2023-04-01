@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto.workPass;
 
 import com.example.demowithtests.domain.AccessLevel;
+import com.example.demowithtests.domain.PassStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -15,4 +16,11 @@ public class WorkPassResponse {
     public AccessLevel accessLevel;
     @Schema(description = "Expire date of work pass.", example = "2025-03-28 21:03:42.547678")
     public LocalDateTime expireDate;
+    @Schema(description = "Status of work pass.", example = "ACTIVE")
+    public PassStatus passStatus;
+    @Schema(description = "Id of previous work pass.", example = "1")
+    public Integer prevPassId;
+
+    public WorkPassResponse prevPass;
+
 }

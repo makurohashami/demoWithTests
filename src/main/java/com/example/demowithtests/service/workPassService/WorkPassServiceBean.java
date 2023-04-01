@@ -1,5 +1,6 @@
 package com.example.demowithtests.service.workPassService;
 
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.repository.WorkPassRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -42,10 +43,12 @@ public class WorkPassServiceBean implements WorkPassService {
     }
 
     @Override
-    public void removePass(Integer id) {
+    public void removePass(Integer id, PassStatus passStatus) {
         var pass = passRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         pass.setIsDeleted(Boolean.TRUE);
+        pass.setDeleteDate(LocalDateTime.now());
+        pass.setPassStatus(passStatus);
         passRepository.save(pass);
     }
 

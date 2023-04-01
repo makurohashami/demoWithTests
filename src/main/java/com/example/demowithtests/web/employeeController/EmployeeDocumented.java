@@ -1,11 +1,13 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
+import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.util.exception.ErrorDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -185,7 +187,7 @@ public interface EmployeeDocumented extends EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    EmployeeReadDto addWorkPassToEmployee(Integer id);
+    EmployeeReadDto addWorkPassToEmployee(Integer id, PassStatus passDeleteStatus);
 
     @Override
     @Operation(summary = "This is endpoint to add/update work pass for employee", description = "Create request to add/update work pass for employee", tags = {"Employee"})
@@ -193,12 +195,12 @@ public interface EmployeeDocumented extends EmployeeController {
             @ApiResponse(responseCode = "201", description = "CREATED."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class))),
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPass pass);
+    EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPassRequest request, PassStatus passDeleteStatus);
 
     @Override
     @Operation(summary = "This is endpoint to remove work pass for of employee.", description = "Create request to remove work pass for of employee", tags = {"Employee"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
-    void deletePassFromEmployee(Integer id);
+    void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
 }

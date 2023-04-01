@@ -1,11 +1,13 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
+import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,9 +71,9 @@ public interface EmployeeController {
 
     Set<String> sendEmailsBySoonExpiredPhotos();
 
-    EmployeeReadDto addWorkPassToEmployee(Integer id);
+    EmployeeReadDto addWorkPassToEmployee(Integer id, PassStatus passDeleteStatus);
 
-    EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPass pass);
+    EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPassRequest request, PassStatus passDeleteStatus);
 
-    void deletePassFromEmployee(Integer id);
+    void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
 }
