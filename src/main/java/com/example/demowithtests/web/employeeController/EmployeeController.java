@@ -7,6 +7,7 @@ import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
+import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,4 +76,6 @@ public interface EmployeeController {
     EmployeeReadDto addWorkPassToEmployee(Integer id, WorkPassRequest request, PassStatus passDeleteStatus);
 
     void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
+
+    List<WorkPassResponse> getOldPassesOfEmployee(Integer id);
 }

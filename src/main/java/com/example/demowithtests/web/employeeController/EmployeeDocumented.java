@@ -7,6 +7,7 @@ import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
+import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.util.exception.ErrorDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -202,4 +203,11 @@ public interface EmployeeDocumented extends EmployeeController {
             @ApiResponse(responseCode = "204", description = "No Content."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
     void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
+
+    @Override
+    @Operation(summary = "This is endpoint to get old work passes of employee.", description = "Create request to get old work passes of employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    List<WorkPassResponse> getOldPassesOfEmployee(Integer id);
 }

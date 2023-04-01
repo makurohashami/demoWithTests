@@ -423,4 +423,19 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.save(employee);
     }
 
+    @Override
+    public List<WorkPass> getOldPassesOfEmployee(Integer id) {
+        var pass = employeeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new)
+                .getWorkPass();
+        return pass == null ?
+                new ArrayList<>() : getOldWorkPassesByRecursion(pass.getPrevPass(), new LinkedList());
+    }
+
+    private List<WorkPass> getOldWorkPassesByRecursion(WorkPass pass, List<WorkPass> list) {
+        if (pass == null)
+            return list;
+        list.add(pass);
+        return getOldWorkPassesByRecursion(pass.getPrevPass(), list);
+    }
 }

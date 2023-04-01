@@ -85,4 +85,6 @@ public interface EmployeeService {
 
     void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
 
+    List<WorkPass> getOldPassesOfEmployee(Integer id);
+
 }

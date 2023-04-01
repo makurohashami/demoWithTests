@@ -7,6 +7,7 @@ import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
+import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.service.employeeService.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeMapper;
 import com.example.demowithtests.util.config.WorkPassMapper;
@@ -264,5 +265,12 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     public void deletePassFromEmployee(@PathVariable Integer id,
                                        @RequestParam(name = "deleteStatus", defaultValue = "EXPIRED") PassStatus passDeleteStatus) {
         employeeService.deletePassFromEmployee(id, passDeleteStatus);
+    }
+
+    @Override
+    @GetMapping("/users/{id}/passes/old")
+    @ResponseStatus(HttpStatus.OK)
+    public List<WorkPassResponse> getOldPassesOfEmployee(@PathVariable Integer id) {
+        return WorkPassMapper.INSTANCE.toResponseList(employeeService.getOldPassesOfEmployee(id));
     }
 }
