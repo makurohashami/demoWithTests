@@ -22,6 +22,7 @@ public interface EmployeeMapper {
     EmployeeDto toDto(Employee employee);
 
     @Mapping(source = "id", target = "avatarUrl", qualifiedByName = "setAvatarUrl")
+    @Mapping(source = "workPass.prevPass.id", target = "workPass.prevPassId")
     EmployeeReadDto toReadDto(Employee employee);
 
     List<EmployeeIsVisibleDto> toListIsVisibleDto(List<Employee> employees);

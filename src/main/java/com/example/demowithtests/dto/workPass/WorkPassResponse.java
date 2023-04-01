@@ -21,6 +21,4 @@ public class WorkPassResponse {
     @Schema(description = "Id of previous work pass.", example = "1")
     public Integer prevPassId;
 
-    public WorkPassResponse prevPass;
-
 }

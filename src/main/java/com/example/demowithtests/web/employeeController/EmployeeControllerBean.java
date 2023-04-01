@@ -259,7 +259,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     }
 
     @Override
-    @PatchMapping("/users/{id}/passes")
+    @DeleteMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePassFromEmployee(@PathVariable Integer id,
                                        @RequestParam(name = "deleteStatus", defaultValue = "EXPIRED") PassStatus passDeleteStatus) {
