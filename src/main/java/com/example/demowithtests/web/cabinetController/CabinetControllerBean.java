@@ -1,7 +1,9 @@
 package com.example.demowithtests.web.cabinetController;
 
-import com.example.demowithtests.domain.Cabinet;
+import com.example.demowithtests.dto.cabinet.CabinetRequest;
+import com.example.demowithtests.dto.cabinet.CabinetResponse;
 import com.example.demowithtests.service.cabinetService.CabinetService;
+import com.example.demowithtests.util.config.CabinetMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,22 +19,24 @@ public class CabinetControllerBean implements CabinetController {
     @Override
     @PostMapping("/cabinets")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cabinet createCabinet(@RequestBody Cabinet cabinet) {
-        return cabinetService.addCabinet(cabinet);
+    public CabinetResponse createCabinet(@RequestBody CabinetRequest request) {
+        var cabinet = CabinetMapper.INSTANCE.fromRequest(request);
+        return CabinetMapper.INSTANCE.toResponse(cabinetService.addCabinet(cabinet));
     }
 
     @Override
     @GetMapping("/cabinets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Cabinet readCabinet(@PathVariable Integer id) {
-        return cabinetService.getCabinet(id);
+    public CabinetResponse readCabinet(@PathVariable Integer id) {
+        return CabinetMapper.INSTANCE.toResponse(cabinetService.getCabinet(id));
     }
 
     @Override
     @PutMapping("/cabinets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Cabinet updateCabinet(@PathVariable Integer id, @RequestBody Cabinet cabinet) {
-        return cabinetService.updateCabinet(id, cabinet);
+    public CabinetResponse updateCabinet(@PathVariable Integer id, @RequestBody CabinetRequest request) {
+        var cabinet = CabinetMapper.INSTANCE.fromRequest(request);
+        return CabinetMapper.INSTANCE.toResponse(cabinetService.updateCabinet(id, cabinet));
     }
 
     @Override

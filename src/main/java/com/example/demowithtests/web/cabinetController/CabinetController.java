@@ -1,14 +1,15 @@
 package com.example.demowithtests.web.cabinetController;
 
-import com.example.demowithtests.domain.Cabinet;
+import com.example.demowithtests.dto.cabinet.CabinetRequest;
+import com.example.demowithtests.dto.cabinet.CabinetResponse;
 
 public interface CabinetController {
 
-    Cabinet createCabinet(Cabinet cabinet);
+    CabinetResponse createCabinet(CabinetRequest request);
 
-    Cabinet readCabinet(Integer id);
+    CabinetResponse readCabinet(Integer id);
 
-    Cabinet updateCabinet(Integer id, Cabinet cabinet);
+    CabinetResponse updateCabinet(Integer id, CabinetRequest request);
 
     void deleteCabinet(Integer id);
 }
