@@ -17,6 +17,11 @@ public interface EmployeeMapper {
 
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
+    @Named("setAvatarUrl")
+    static String setAvatarUrl(Integer id) {
+        return "http://localhost:8087/api/users/" + id + "/avatar";
+    }
+
     Employee fromDto(EmployeeDto dto);
 
     EmployeeDto toDto(Employee employee);
@@ -30,9 +35,4 @@ public interface EmployeeMapper {
     List<EmployeeReadDto> toListReadDto(List<Employee> employees);
 
     Employee fromUpdateDto(EmployeeUpdateDto dto);
-
-    @Named("setAvatarUrl")
-    static String setAvatarUrl(Integer id) {
-        return "http://localhost:8087/api/users/" + id + "/avatar";
-    }
 }

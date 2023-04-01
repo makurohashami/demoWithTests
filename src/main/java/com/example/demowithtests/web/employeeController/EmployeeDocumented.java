@@ -2,7 +2,6 @@ package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.domain.PassStatus;
-import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
