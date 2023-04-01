@@ -84,4 +84,8 @@ public interface EmployeeService {
 
     void deletePassFromEmployee(Integer id);
 
+    Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
+
 }

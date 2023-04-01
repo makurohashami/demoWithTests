@@ -2,6 +2,7 @@ package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.*;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.cabinetService.CabinetService;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.service.fileManagerService.FileManagerService;
 import com.example.demowithtests.service.workPassService.WorkPassService;
@@ -39,6 +40,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmailSenderService emailSenderService;
     private final FileManagerService fileManagerService;
     private final WorkPassService passService;
+    private final CabinetService cabinetService;
 
     @Override
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
@@ -420,4 +422,25 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.save(employee);
     }
 
+    @Override
+    public Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
+        var employee = employeeRepository.findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        var cabinet = cabinetService.getCabinet(cabinetId);
+
+        employee.getCabinets().add(cabinet);
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId) {
+        var employee = employeeRepository.findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        var cabinet = cabinetService.getCabinet(cabinetId);
+
+        employee.getCabinets().remove(cabinet);
+
+        employeeRepository.save(employee);
+    }
 }

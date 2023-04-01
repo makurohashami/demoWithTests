@@ -259,4 +259,19 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     public void deletePassFromEmployee(@PathVariable Integer id) {
         employeeService.deletePassFromEmployee(id);
     }
+
+    @PostMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addEmployeeToCabinet(@PathVariable("e_id") Integer employeeId,
+                                                @PathVariable("c_id") Integer cabinetId) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addEmployeeToCabinet(employeeId, cabinetId));
+    }
+
+    @DeleteMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeEmployeeFromCabinet(@PathVariable("e_id") Integer employeeId,
+                                          @PathVariable("c_id") Integer cabinetId) {
+        employeeService.removeEmployeeFromCabinet(employeeId, cabinetId);
+    }
+
 }
