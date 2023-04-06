@@ -3,6 +3,7 @@ package com.example.demowithtests.service.cabinetService;
 import com.example.demowithtests.domain.Cabinet;
 import com.example.demowithtests.repository.CabinetRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
+import com.example.demowithtests.util.exception.ResourceUnavailableException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,11 @@ public class CabinetServiceService implements CabinetService {
 
     @Override
     public Cabinet getCabinet(Integer id) {
-        return cabinetRepository.findById(id)
+        var cabinet = cabinetRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+        if (cabinet.getIsDeleted())
+            throw new ResourceUnavailableException();
+        return cabinet;
     }
 
     @Override
@@ -28,7 +32,6 @@ public class CabinetServiceService implements CabinetService {
         return cabinetRepository.findById(id)
                 .map(c -> {
                     c.setName(cabinet.getName());
-                    /*c.setEmployees(cabinet.getEmployees());*/
                     return cabinetRepository.save(c);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
