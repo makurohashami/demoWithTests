@@ -30,7 +30,7 @@ public class EmployeesCabinetsServiceBean implements EmployeesCabinetsService {
 
     @Override
     public EmployeesCabinets getRelation(Integer employeeId, Integer cabinetId) {
-       return repository.findById(
+        return repository.findById(
                         EmployeesCabinetsKey
                                 .builder()
                                 .employeeId(employeeId)
