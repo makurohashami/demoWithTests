@@ -29,8 +29,8 @@ spring:
 #      password: admin
 # Logger configuration
 logging:
-  pattern:
-    console: "%d %-5level %logger : %msg%n"
+  #pattern:
+    #console: "%d %-5level %logger : %msg%n"
   level:
     com.example.demowithtests: info
     org.springframework: info
