@@ -274,6 +274,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         return WorkPassMapper.INSTANCE.toResponseList(employeeService.getOldPassesOfEmployee(id));
     }
 
+    @Override
     @PostMapping("/users/{e_id}/cabinets/{c_id}")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeReadDto addEmployeeToCabinet(@PathVariable("e_id") Integer employeeId,
@@ -281,6 +282,7 @@ public class EmployeeControllerBean implements EmployeeDocumented {
         return EmployeeMapper.INSTANCE.toReadDto(employeeService.addEmployeeToCabinet(employeeId, cabinetId));
     }
 
+    @Override
     @DeleteMapping("/users/{e_id}/cabinets/{c_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeFromCabinet(@PathVariable("e_id") Integer employeeId,

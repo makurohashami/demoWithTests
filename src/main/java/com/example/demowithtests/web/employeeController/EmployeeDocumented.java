@@ -210,4 +210,19 @@ public interface EmployeeDocumented extends EmployeeController {
             @ApiResponse(responseCode = "200", description = "OK."),
             @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
     List<WorkPassResponse> getOldPassesOfEmployee(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint to add cabinet for employee", description = "Create request to add cabinet for employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    EmployeeReadDto addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    @Override
+    @Operation(summary = "This is endpoint to remove cabinet for of employee.", description = "Create request to remove cabinet for of employee", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No Content."),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content(schema = @Schema(implementation = ErrorDetails.class)))})
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
 }

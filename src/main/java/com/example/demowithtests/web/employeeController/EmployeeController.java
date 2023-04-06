@@ -78,4 +78,8 @@ public interface EmployeeController {
     void deletePassFromEmployee(Integer id, PassStatus passDeleteStatus);
 
     List<WorkPassResponse> getOldPassesOfEmployee(Integer id);
+
+    EmployeeReadDto addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
 }
