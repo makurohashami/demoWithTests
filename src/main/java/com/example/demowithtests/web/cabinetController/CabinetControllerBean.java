@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CabinetControllerBean implements CabinetController {
+public class CabinetControllerBean implements CabinetDocumented {
 
     private final CabinetService cabinetService;
 

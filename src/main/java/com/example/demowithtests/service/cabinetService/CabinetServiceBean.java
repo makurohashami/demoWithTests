@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CabinetServiceService implements CabinetService {
+public class CabinetServiceBean implements CabinetService {
 
     private final CabinetRepository cabinetRepository;
 
