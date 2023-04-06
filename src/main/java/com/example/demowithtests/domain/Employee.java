@@ -41,7 +41,6 @@ public class Employee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pass_id", referencedColumnName = "id")
     private WorkPass workPass;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private Set<Cabinet> cabinets = new HashSet<>();
+    @OneToMany(mappedBy = "employee")
+    private Set<EmployeesCabinets> employeesCabinets = new HashSet<>();
 }

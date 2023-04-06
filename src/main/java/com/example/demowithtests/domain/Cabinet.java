@@ -1,10 +1,6 @@
 package com.example.demowithtests.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class Cabinet {
 
     @Id
@@ -24,8 +21,8 @@ public class Cabinet {
     private String name;
     private Integer capacity = 1;
     private Boolean isDeleted = Boolean.FALSE;
-    @ManyToMany(mappedBy = "cabinets", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Employee> employees = new HashSet<>();
+    @OneToMany(mappedBy = "cabinet")
+    @ToString.Exclude
+    private Set<EmployeesCabinets> employeesCabinets = new HashSet<>();
 
 }

@@ -12,16 +12,22 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = {EmployeesCabinetsMapper.class})
 public interface EmployeeMapper {
 
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
+
+    @Named("setAvatarUrl")
+    static String setAvatarUrl(Integer id) {
+        return "http://localhost:8087/api/users/" + id + "/avatar";
+    }
 
     Employee fromDto(EmployeeDto dto);
 
     EmployeeDto toDto(Employee employee);
 
     @Mapping(source = "id", target = "avatarUrl", qualifiedByName = "setAvatarUrl")
+    @Mapping(source = "employeesCabinets", target = "cabinets")
     EmployeeReadDto toReadDto(Employee employee);
 
     List<EmployeeIsVisibleDto> toListIsVisibleDto(List<Employee> employees);
@@ -29,9 +35,4 @@ public interface EmployeeMapper {
     List<EmployeeReadDto> toListReadDto(List<Employee> employees);
 
     Employee fromUpdateDto(EmployeeUpdateDto dto);
-
-    @Named("setAvatarUrl")
-    static String setAvatarUrl(Integer id) {
-        return "http://localhost:8087/api/users/" + id + "/avatar";
-    }
 }
