@@ -2,7 +2,9 @@ package com.example.demowithtests.service.employeeService;
 
 import com.example.demowithtests.domain.*;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.cabinetService.CabinetService;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
+import com.example.demowithtests.service.employeesCabinetsService.EmployeesCabinetsService;
 import com.example.demowithtests.service.fileManagerService.FileManagerService;
 import com.example.demowithtests.service.workPassService.WorkPassService;
 import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
@@ -39,6 +41,8 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmailSenderService emailSenderService;
     private final FileManagerService fileManagerService;
     private final WorkPassService passService;
+    private final CabinetService cabinetService;
+    private final EmployeesCabinetsService employeesCabinetsService;
 
     @Override
     @ActivateCustomAnnotations({ToLowerCase.class, Name.class})
@@ -73,8 +77,18 @@ public class EmployeeServiceBean implements EmployeeService {
         changeVisibleStatus(employee);
         setOnlyActiveAddresses(employee);
         setOnlyNotExpiredAvatars(employee);
+        setOnlyNotDeletedCabinetsRelation(employee);
         if (!employee.getIsVisible()) throw new ResourceUnavailableException();
         return employee;
+    }
+
+    private void setOnlyNotDeletedCabinetsRelation(Employee employee) {
+        Set<EmployeesCabinets> set = employee
+                .getEmployeesCabinets()
+                .stream()
+                .filter(ec -> ec.getIsActive())
+                .collect(Collectors.toSet());
+        employee.setEmployeesCabinets(set);
     }
 
     private void checkPassIsAvailable(Employee employee) {
@@ -437,5 +451,19 @@ public class EmployeeServiceBean implements EmployeeService {
             return list;
         list.add(pass);
         return getOldWorkPassesByRecursion(pass.getPrevPass(), list);
+    }
+
+    @Override
+    public Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
+        var employee = employeeRepository.findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        var cabinet = cabinetService.getCabinet(cabinetId);
+        employeesCabinetsService.addRelation(employee, cabinet);
+        return getById(employeeId);
+    }
+
+    @Override
+    public void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId) {
+        employeesCabinetsService.deleteRelation(employeeId, cabinetId);
     }
 }

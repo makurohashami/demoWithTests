@@ -1,7 +1,7 @@
 package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.domain.PassStatus;
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeIsVisibleDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -9,8 +9,7 @@ import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.service.employeeService.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeMapper;
-import com.example.demowithtests.util.config.WorkPassMapper;
+import com.example.demowithtests.util.mappers.EmployeeMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -273,4 +272,19 @@ public class EmployeeControllerBean implements EmployeeDocumented {
     public List<WorkPassResponse> getOldPassesOfEmployee(@PathVariable Integer id) {
         return WorkPassMapper.INSTANCE.toResponseList(employeeService.getOldPassesOfEmployee(id));
     }
+
+    @PostMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addEmployeeToCabinet(@PathVariable("e_id") Integer employeeId,
+                                                @PathVariable("c_id") Integer cabinetId) {
+        return EmployeeMapper.INSTANCE.toReadDto(employeeService.addEmployeeToCabinet(employeeId, cabinetId));
+    }
+
+    @DeleteMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeEmployeeFromCabinet(@PathVariable("e_id") Integer employeeId,
+                                          @PathVariable("c_id") Integer cabinetId) {
+        employeeService.removeEmployeeFromCabinet(employeeId, cabinetId);
+    }
+
 }

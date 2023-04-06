@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;

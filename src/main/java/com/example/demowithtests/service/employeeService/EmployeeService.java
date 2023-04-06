@@ -87,4 +87,8 @@ public interface EmployeeService {
 
     List<WorkPass> getOldPassesOfEmployee(Integer id);
 
+    Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
+
 }

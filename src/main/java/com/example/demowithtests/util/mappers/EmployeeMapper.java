@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = {EmployeesCabinetsMapper.class})
 public interface EmployeeMapper {
 
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
@@ -27,6 +27,7 @@ public interface EmployeeMapper {
     EmployeeDto toDto(Employee employee);
 
     @Mapping(source = "id", target = "avatarUrl", qualifiedByName = "setAvatarUrl")
+    @Mapping(source = "employeesCabinets", target = "cabinets")
     @Mapping(source = "workPass.prevPass.id", target = "workPass.prevPassId")
     EmployeeReadDto toReadDto(Employee employee);
 

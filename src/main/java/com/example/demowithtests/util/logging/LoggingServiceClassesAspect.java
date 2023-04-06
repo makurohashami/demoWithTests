@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 @Log4j2
@@ -25,7 +24,7 @@ public class LoggingServiceClassesAspect {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
         if (args.length > 0) {
-            log.debug("Service: " + methodName + " - start. Args - {}", Arrays.toString(args));
+            log.debug("Service: " + methodName + " - start. Args count - {}", args.length);
         } else {
             log.debug("Service: " + methodName + " - start.");
         }

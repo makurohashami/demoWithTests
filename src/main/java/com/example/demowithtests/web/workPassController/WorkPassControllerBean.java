@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.dto.workPass.WorkPassRequest;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import com.example.demowithtests.service.workPassService.WorkPassService;
-import com.example.demowithtests.util.config.WorkPassMapper;
+import com.example.demowithtests.util.mappers.WorkPassMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

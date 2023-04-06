@@ -2,6 +2,7 @@ package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.address.AddressResponseDto;
+import com.example.demowithtests.dto.cabinet.CabinetResponse;
 import com.example.demowithtests.dto.workPass.WorkPassResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -28,4 +29,7 @@ public class EmployeeReadDto {
 
     @Schema(description = "Work pass of an employee.")
     public WorkPassResponse workPass;
+
+    @Schema(description = "Cabinets of an employee.")
+    public Set<CabinetResponse> cabinets;
 }
