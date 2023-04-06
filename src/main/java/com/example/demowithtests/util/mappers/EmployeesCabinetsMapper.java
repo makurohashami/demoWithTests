@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface EmployeesCabinetsMapper {
 
     @Mapping(source = "cabinet", target = ".")
-    CabinetResponse employeesCabinetsToResponse(EmployeesCabinets employeesCabinets);
+    CabinetResponse toResponse(EmployeesCabinets employeesCabinets);
 
 }
