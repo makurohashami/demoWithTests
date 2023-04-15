@@ -6,7 +6,7 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/employee
+    url: jdbc:postgresql://postgres:5432/employee
     username: postgres
     password: postgres
   # JPA properties
@@ -35,6 +35,7 @@ logging:
     com.example.demowithtests: info
     org.springframework: info
     org.hibernate: info
+    org.flywaydb: info
 # Server configuration
 server:
   port: 8087 #set your port
