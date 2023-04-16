@@ -24,5 +24,7 @@ public class Cabinet {
     @OneToMany(mappedBy = "cabinet")
     @ToString.Exclude
     private Set<EmployeesCabinets> employeesCabinets = new HashSet<>();
+    private Integer freePlacesCount = capacity;
+    private Boolean hasFreePlaces = Boolean.TRUE;
 
 }

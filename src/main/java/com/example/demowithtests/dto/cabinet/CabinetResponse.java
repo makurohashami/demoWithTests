@@ -10,4 +10,6 @@ public class CabinetResponse {
     public String name;
     @Schema(description = "Capacity of a cabinet.", example = "5")
     public Integer capacity;
+    @Schema(description = "Count of a free places in cabinet.", example = "3")
+    public Integer freePlacesCount;
 }

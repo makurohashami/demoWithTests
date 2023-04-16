@@ -18,8 +18,12 @@ public class CabinetRequest {
     @Min(value = 1, message = "Min capacity is 1")
     @Max(value = 30, message = "Max capacity is 30")
     @Schema(description = "Capacity of a cabinet.", example = "5")
-    public Integer capacity;
+    public Integer capacity = 1;
 
     @JsonIgnore
     public Boolean isDeleted = Boolean.FALSE;
+    @JsonIgnore
+    public Integer freePlacesCount = capacity;
+    @JsonIgnore
+    public Boolean hasFreePlaces = Boolean.TRUE;
 }
