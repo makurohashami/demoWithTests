@@ -24,3 +24,5 @@ services:
       - img_volume:/images/avatars/
     ports:
       - "8087:8087"
+    links:
+      - "postgres"
