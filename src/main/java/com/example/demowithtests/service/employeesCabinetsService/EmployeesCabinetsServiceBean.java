@@ -48,4 +48,9 @@ public class EmployeesCabinetsServiceBean implements EmployeesCabinetsService {
         relation.setIsActive(Boolean.FALSE);
         repository.save(relation);
     }
+
+    @Override
+    public Integer getCountActiveOccupiedPlaces(Integer id) {
+        return repository.selectCountOfActiveOccupiedPlacesInCabinetByHisId(id);
+    }
 }

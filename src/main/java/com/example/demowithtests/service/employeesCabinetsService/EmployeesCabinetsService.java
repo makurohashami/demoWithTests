@@ -12,4 +12,6 @@ public interface EmployeesCabinetsService {
 
     void deleteRelation(Integer employeeId, Integer cabinetId);
 
+    Integer getCountActiveOccupiedPlaces(Integer id);
+
 }
