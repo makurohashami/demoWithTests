@@ -10,6 +10,7 @@ import com.example.demowithtests.service.workPassService.WorkPassService;
 import com.example.demowithtests.util.annotations.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.Name;
 import com.example.demowithtests.util.annotations.ToLowerCase;
+import com.example.demowithtests.util.exception.CabinetIsFullException;
 import com.example.demowithtests.util.exception.ImageException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceUnavailableException;
@@ -458,12 +459,25 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(employeeId)
                 .orElseThrow(ResourceNotFoundException::new);
         var cabinet = cabinetService.getCabinet(cabinetId);
+        if (cabinet.getHasFreePlaces().equals(Boolean.FALSE))
+            throw new CabinetIsFullException();
         employeesCabinetsService.addRelation(employee, cabinet);
+        Integer freePlacesCount = cabinet.getCapacity() - employeesCabinetsService.getCountActiveOccupiedPlaces(cabinetId);
+        cabinet.setFreePlacesCount(freePlacesCount);
+        if (freePlacesCount == 0) {
+            cabinet.setHasFreePlaces(Boolean.FALSE);
+        }
+        cabinetService.addCabinet(cabinet);
         return getById(employeeId);
     }
 
     @Override
     public void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId) {
         employeesCabinetsService.deleteRelation(employeeId, cabinetId);
+        var cabinet = cabinetService.getCabinet(cabinetId);
+        Integer freePlacesCount = cabinet.getCapacity() - employeesCabinetsService.getCountActiveOccupiedPlaces(cabinetId);
+        cabinet.setFreePlacesCount(freePlacesCount);
+        cabinet.setHasFreePlaces(Boolean.TRUE);
+        cabinetService.addCabinet(cabinet);
     }
 }
