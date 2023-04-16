@@ -23,7 +23,5 @@ public class CabinetRequest {
     @JsonIgnore
     public Boolean isDeleted = Boolean.FALSE;
     @JsonIgnore
-    public Integer freePlacesCount = capacity;
-    @JsonIgnore
     public Boolean hasFreePlaces = Boolean.TRUE;
 }

@@ -15,6 +15,7 @@ public class CabinetServiceBean implements CabinetService {
 
     @Override
     public Cabinet addCabinet(Cabinet cabinet) {
+        cabinet.setFreePlacesCount(cabinet.getCapacity());
         return cabinetRepository.save(cabinet);
     }
 
