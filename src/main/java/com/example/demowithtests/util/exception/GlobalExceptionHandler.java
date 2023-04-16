@@ -96,4 +96,13 @@ public class GlobalExceptionHandler {
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CabinetIsFullException.class)
+    public ResponseEntity<?> methodCabinetIsFullException(WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "This cabinet is full. Try another.",
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 }
