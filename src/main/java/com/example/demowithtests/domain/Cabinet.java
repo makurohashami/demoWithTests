@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
+@Builder
 public class Cabinet {
 
     @Id
