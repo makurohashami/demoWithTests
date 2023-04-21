@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "addresses")
 @EqualsAndHashCode
+@Builder
 public class Address {
 
     @Id
