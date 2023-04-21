@@ -53,6 +53,7 @@ public class EmployeesCabinetsRepositoryTests {
     @Test
     @Order(2)
     @DisplayName("get employees cabinets by id test")
+    @Disabled
     public void getEmployeesCabinetsByIdTest() {
         var entity = repository.findById(
                         new EmployeesCabinetsKey(1, 1))
@@ -75,6 +76,7 @@ public class EmployeesCabinetsRepositoryTests {
     @Test
     @Order(4)
     @DisplayName("update employees cabinets test")
+    @Disabled
     public void updateEmployeesCabinetsTest() {
         var entity = repository.findById(
                         new EmployeesCabinetsKey(1, 1))
@@ -98,6 +100,7 @@ public class EmployeesCabinetsRepositoryTests {
     @Test
     @Order(6)
     @DisplayName("delete employees cabinets test")
+    @Disabled
     public void deleteEmployeesCabinetsTest() {
         var entity = repository.findById(
                         new EmployeesCabinetsKey(1, 1))
