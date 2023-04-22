@@ -7,9 +7,7 @@ create table if not exists users
     is_visible boolean,
     name       varchar(255),
     pass_id    integer,
-    primary key (id),
-    constraint fkoi0gbc1clny8by7j6udah3kbf
-        foreign key (pass_id) references workpasses
+    primary key (id)
 );
 
 create table if not exists addresses

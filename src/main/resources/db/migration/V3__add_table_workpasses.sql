@@ -13,3 +13,8 @@ create table if not exists workpasses
     constraint fk7rydv10wde3cksst2p8f1w4bc
         foreign key (prev_pass_id) references workpasses
 );
+
+ALTER TABLE users
+ADD CONSTRAINT fkoi0gbc1clny8by7j6udah3kbf
+FOREIGN KEY (pass_id)
+REFERENCES workpasses (id);
