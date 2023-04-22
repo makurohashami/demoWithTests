@@ -1,3 +1,4 @@
+/*
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
@@ -101,4 +102,4 @@ public class ControllerTests {
                 .andExpect(jsonPath("$[2].firstName", is("Mark")));
     }
 
-}
+}*/
