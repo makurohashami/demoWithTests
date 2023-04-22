@@ -16,6 +16,11 @@ services:
       - postgres_volume:/var/lib/postgresql/data
     ports:
       - "5434:5432"
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1m
+      timeout: 10s
+      retries: 2
 
   app:
     build: ./
@@ -26,3 +31,9 @@ services:
       - "8087:8087"
     links:
       - "postgres"
+    # Service health check
+    healthcheck:
+      test: curl -f http://localhost:8087/profile || exit 1
+      interval: 1m
+      timeout: 5s
+      retries: 10
