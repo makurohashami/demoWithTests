@@ -1,3 +1,3 @@
 FROM openjdk:11
-ADD /target/demoWithTests-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ADD /target/demo-hillel-app.jar demo-hillel-app.jar
+ENTRYPOINT ["java", "-jar", "demo-hillel-app.jar"]
