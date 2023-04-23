@@ -2,6 +2,7 @@ package com.example.demowithtests.serviceTests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.PassStatus;
 import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.employeeService.EmployeeServiceBean;
@@ -21,27 +22,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Employee Service Tests")
 public class EmployeeServiceTests {
 
-
     @Mock
     private EmployeeRepository employeeRepository;
-    /* @Mock
-     private EmailSenderServiceBean emailSenderService;*/
-    /*@Mock
-    private FileManagerServiceBean fileManagerService;*/
     @Mock
     private WorkPassServiceBean workPassService;
-    /*@Mock
-    private CabinetServiceBean cabinetService;
-    @Mock
-    private EmployeesCabinetsServiceBean employeesCabinetsService;*/
 
     @InjectMocks
     private EmployeeServiceBean employeeService;
@@ -115,16 +106,27 @@ public class EmployeeServiceTests {
 
     @Test
     @DisplayName("add work pass to employee test")
-    @Disabled
     public void addWorkPassToEmployeeTest() {
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        when(workPassService.getFree()).thenReturn(new WorkPass());
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
+        var result = employeeService.addWorkPassToEmployee(employee.getId(), PassStatus.EXPIRED);
+
+        assertEquals(result.getWorkPass().getPassStatus(), PassStatus.ACTIVE);
+        assertEquals(result.getWorkPass().getIsFree(), false);
+        verify(employeeRepository, times(2)).save(employee);
     }
 
     @Test
     @DisplayName("delete pass from employee test")
-    @Disabled
     public void deletePassFromEmployee() {
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
+        employeeService.deletePassFromEmployee(employee.getId(), PassStatus.EXPIRED);
+
+        assertNull(employee.getWorkPass());
     }
 
     @Test
