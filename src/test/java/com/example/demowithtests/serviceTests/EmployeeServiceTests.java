@@ -32,9 +32,9 @@ public class EmployeeServiceTests {
 
     @Mock
     private EmployeeRepository employeeRepository;
+    /* @Mock
+     private EmailSenderServiceBean emailSenderService;*/
     /*@Mock
-    private EmailSenderServiceBean emailSenderService;
-    @Mock
     private FileManagerServiceBean fileManagerService;*/
     @Mock
     private WorkPassServiceBean workPassService;
@@ -105,17 +105,12 @@ public class EmployeeServiceTests {
         when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
+        assertEquals(employee.getIsVisible(), Boolean.TRUE);
+
         employeeService.removeById(employee.getId());
 
         assertEquals(employee.getIsVisible(), Boolean.FALSE);
         verify(employeeRepository).save(employee);
-    }
-
-    @Test
-    @DisplayName("save avatar to employee test")
-    @Disabled
-    public void saveAvatarToEmployee() {
-
     }
 
     @Test
