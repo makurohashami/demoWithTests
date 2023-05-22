@@ -32,7 +32,7 @@ Quick guide to run app.
 1. Install Docker. [Docker Docs](https://docs.docker.com/get-docker/).
 2. Install Maven. [Download Maven](https://maven.apache.org/download.cgi).
 3. Run Docker (required for maven plugin to work).
-4. Clone the repository `git clone https://github.com/makurohashami/demoWithTests.git`.
+4. Clone the repository `git clone https://github.com/makurohashami/employeesSpringBoot.git`.
 5. Open file `application.yml` and set `create` to field `spring: jpa: hibernate: ddl-auto:` for the first run. Next
    time you run it, put `update`.
 6. To work with e-mail, configure the SMPT server you need and configure it in the MailConfig.java file. P.S. If you
