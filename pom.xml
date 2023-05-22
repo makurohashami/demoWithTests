@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>demoWithTests</artifactId>
+    <artifactId>employeesSpringBoot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>demoWithTests</name>
